@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func addRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
+func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 	clients := rg.Group("/clients")
 	{
 		clients.GET("/", logisticsAPI.FindAllClients)
@@ -13,9 +13,19 @@ func addRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 		clients.PUT(":id", logisticsAPI.UpdateClient)
 		clients.DELETE(":id", logisticsAPI.DeleteClient)
 	}
+
+	productTypes := rg.Group("/product_types")
+	{
+		productTypes.GET("/", logisticsAPI.FindAllProductTypes)
+		productTypes.POST("/", logisticsAPI.SaveProductType)
+		productTypes.GET(":id", logisticsAPI.FindProductTypeById)
+		productTypes.PUT(":id", logisticsAPI.UpdateProductType)
+		productTypes.DELETE(":id", logisticsAPI.DeleteProductType)
+	}
 }
 
-func getRoutes(logisticsAPI *LogisticsAPI) {
+func getRegisterRoutes(logisticsAPI *LogisticsAPI) {
 	v1 := server.Group("/v1")
-	addRoutes(v1, logisticsAPI)
+	register := v1.Group("/register")
+	addRegisterRoutes(register, logisticsAPI)
 }

@@ -6,8 +6,8 @@ import (
 
 	"strconv"
 
-	"github.com/freddiemo/logistics-api/internal/clients/model"
-	"github.com/freddiemo/logistics-api/internal/clients/service"
+	"github.com/freddiemo/logistics-api/internal/register/clients/model"
+	"github.com/freddiemo/logistics-api/internal/register/clients/service"
 	"github.com/freddiemo/logistics-api/validators"
 )
 
