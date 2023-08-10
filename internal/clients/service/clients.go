@@ -1,0 +1,29 @@
+package service
+
+import (
+	"github.com/freddiemo/logistics-api/internal/clients/model"
+	"github.com/freddiemo/logistics-api/internal/clients/repository"
+)
+
+type ClientServiceInterface interface {
+	Save(model.Client) (model.Client, error)
+}
+
+type clientService struct {
+	clientRepository repository.ClientRepository
+}
+
+func NewClientService(repository repository.ClientRepository) ClientServiceInterface {
+	return &clientService{
+		clientRepository: repository,
+	}
+}
+
+func (service *clientService) Save(client model.Client) (model.Client, error) {
+	client, err := service.clientRepository.Save(client)
+	if err != nil {
+		return model.Client{}, err
+	}
+
+	return client, nil
+}
