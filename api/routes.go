@@ -20,6 +20,7 @@ func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 		productTypes.POST("/", logisticsAPI.SaveProductType)
 		productTypes.GET(":id", logisticsAPI.FindProductTypeById)
 		productTypes.PUT(":id", logisticsAPI.UpdateProductType)
+		productTypes.DELETE(":id", logisticsAPI.DeleteProductType)
 	}
 }
 

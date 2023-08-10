@@ -14,6 +14,7 @@ type ProductTypeController interface {
 	FindAll(ctx *gin.Context) ([]model.ProductType, error)
 	FindById(ctx *gin.Context) (model.ProductType, error)
 	Update(ctx *gin.Context) (model.ProductType, error)
+	Delete(ctx *gin.Context) error
 }
 
 type productTypeController struct {
@@ -85,4 +86,17 @@ func (controller *productTypeController) Update(ctx *gin.Context) (model.Product
 	}
 
 	return productType, nil
+}
+
+func (controller *productTypeController) Delete(ctx *gin.Context) error {
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return err
+	}
+
+	if err = controller.productTypeService.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

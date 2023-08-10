@@ -10,6 +10,7 @@ type ProductTypeServiceInterface interface {
 	FindAll() ([]model.ProductType, error)
 	FindById(id int64) (model.ProductType, error)
 	Update(model.ProductType) (model.ProductType, error)
+	Delete(id int64) error
 }
 
 type productTypeService struct {
@@ -56,4 +57,12 @@ func (service *productTypeService) Update(productType model.ProductType) (model.
 	}
 
 	return productType, nil
+}
 
+func (service *productTypeService) Delete(id int64) error {
+	if err := service.productTypeRepository.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
+}

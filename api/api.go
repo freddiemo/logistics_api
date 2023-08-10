@@ -121,3 +121,14 @@ func (api *LogisticsAPI) UpdateProductType(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, productType)
 	}
 }
+
+func (api *LogisticsAPI) DeleteProductType(ctx *gin.Context) {
+	err := api.productTypesController.Delete(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusNoContent, nil)
+	}
+}

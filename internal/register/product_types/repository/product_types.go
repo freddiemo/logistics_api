@@ -11,6 +11,7 @@ type ProductTypeRepository interface {
 	FindAll() ([]model.ProductType, error)
 	FindById(id int64) (model.ProductType, error)
 	Update(model.ProductType) (model.ProductType, error)
+	Delete(id int64) error
 }
 
 type productTypeRepo struct {
@@ -63,4 +64,17 @@ func (productTypeRepo *productTypeRepo) Update(productType model.ProductType) (m
 	}
 
 	return productType, nil
+}
+
+func (productTypeRepo *productTypeRepo) Delete(id int64) error {
+	var productType model.ProductType
+	result := productTypeRepo.db.Delete(&productType, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
 }
