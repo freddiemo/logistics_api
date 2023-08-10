@@ -9,6 +9,7 @@ import (
 
 type ProductTypeController interface {
 	Save(ctx *gin.Context) (model.ProductType, error)
+	FindAll(ctx *gin.Context) ([]model.ProductType, error)
 }
 
 type productTypeController struct {
@@ -38,4 +39,13 @@ func (controller *productTypeController) Save(ctx *gin.Context) (model.ProductTy
 	}
 
 	return productType, nil
+}
+
+func (controller *productTypeController) FindAll(ctx *gin.Context) ([]model.ProductType, error) {
+	productTypes, err := controller.productTypeService.FindAll()
+	if err != nil {
+		return []model.ProductType{}, err
+	}
+
+	return productTypes, nil
 }

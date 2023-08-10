@@ -8,6 +8,7 @@ import (
 
 type ProductTypeRepository interface {
 	Save(productType model.ProductType) (model.ProductType, error)
+	FindAll() ([]model.ProductType, error)
 }
 
 type productTypeRepo struct {
@@ -28,4 +29,14 @@ func (productTypeRepo *productTypeRepo) Save(productType model.ProductType) (mod
 	}
 
 	return productType, nil
+}
+
+func (productTypeRepo *productTypeRepo) FindAll() ([]model.ProductType, error) {
+	var productTypes []model.ProductType
+	result := productTypeRepo.db.Find(&productTypes)
+	if result.Error != nil {
+		return productTypes, result.Error
+	}
+
+	return productTypes, nil
 }

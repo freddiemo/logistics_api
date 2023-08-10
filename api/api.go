@@ -88,3 +88,14 @@ func (api *LogisticsAPI) SaveProductType(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, productType)
 	}
 }
+
+func (api *LogisticsAPI) FindAllProductTypes(ctx *gin.Context) {
+	productTypes, err := api.productTypesController.FindAll(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, productTypes)
+	}
+}

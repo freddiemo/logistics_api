@@ -7,6 +7,7 @@ import (
 
 type ProductTypeServiceInterface interface {
 	Save(model.ProductType) (model.ProductType, error)
+	FindAll() ([]model.ProductType, error)
 }
 
 type productTypeService struct {
@@ -26,4 +27,13 @@ func (service *productTypeService) Save(productType model.ProductType) (model.Pr
 	}
 
 	return productType, nil
+}
+
+func (service *productTypeService) FindAll() ([]model.ProductType, error) {
+	productTypes, err := service.productTypeRepository.FindAll()
+	if err != nil {
+		return []model.ProductType{}, err
+	}
+
+	return productTypes, nil
 }
