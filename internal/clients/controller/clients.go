@@ -11,6 +11,7 @@ import (
 
 type ClientController interface {
 	Save(ctx *gin.Context) (model.Client, error)
+	FindAll(ctx *gin.Context) ([]model.Client, error)
 }
 
 type clientController struct {
@@ -45,4 +46,13 @@ func (controller *clientController) Save(ctx *gin.Context) (model.Client, error)
 	}
 
 	return client, nil
+}
+
+func (controller *clientController) FindAll(ctx *gin.Context) ([]model.Client, error) {
+	clients, err := controller.clientService.FindAll()
+	if err != nil {
+		return []model.Client{}, err
+	}
+
+	return clients, nil
 }

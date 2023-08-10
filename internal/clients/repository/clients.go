@@ -8,6 +8,7 @@ import (
 
 type ClientRepository interface {
 	Save(client model.Client) (model.Client, error)
+	FindAll() ([]model.Client, error)
 }
 
 type clientRepo struct {
@@ -19,7 +20,7 @@ func NewClientRepository(db *gorm.DB) ClientRepository {
 		db: db,
 	}
 }
-  
+
 func (clientRepo *clientRepo) Save(client model.Client) (model.Client, error) {
 	result := clientRepo.db.Save(&client)
 
@@ -28,4 +29,14 @@ func (clientRepo *clientRepo) Save(client model.Client) (model.Client, error) {
 	}
 
 	return client, nil
+}
+
+func (clientRepo *clientRepo) FindAll() ([]model.Client, error) {
+	var clients []model.Client
+	result := clientRepo.db.Find(&clients)
+	if result.Error != nil {
+		return clients, result.Error
+	}
+
+	return clients, nil
 }

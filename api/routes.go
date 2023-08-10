@@ -2,17 +2,12 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-
-	"net/http"
 )
 
 func addRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 	clients := rg.Group("/clients")
 	{
-		clients.GET("/", func(c *gin.Context) {
-			c.JSON(http.StatusOK, "clients")
-		})
-
+		clients.GET("/", logisticsAPI.FindAllClients)
 		clients.POST("/", logisticsAPI.SaveClient)
 	}
 }

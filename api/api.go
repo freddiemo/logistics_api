@@ -28,3 +28,14 @@ func (api *LogisticsAPI) SaveClient(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, client)
 	}
 }
+
+func (api *LogisticsAPI) FindAllClients(ctx *gin.Context) {
+	clients, err := api.clientsController.FindAll(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, clients)
+	}
+}

@@ -7,6 +7,7 @@ import (
 
 type ClientServiceInterface interface {
 	Save(model.Client) (model.Client, error)
+	FindAll() ([]model.Client, error)
 }
 
 type clientService struct {
@@ -26,4 +27,13 @@ func (service *clientService) Save(client model.Client) (model.Client, error) {
 	}
 
 	return client, nil
+}
+
+func (service *clientService) FindAll() ([]model.Client, error) {
+	clients, err := service.clientRepository.FindAll()
+	if err != nil {
+		return []model.Client{}, err
+	}
+
+	return clients, nil
 }
