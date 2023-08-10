@@ -2,6 +2,8 @@ package model
 
 import (
 	"database/sql/driver"
+	"fmt"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -14,9 +16,13 @@ const (
 )
 
 func (tt *TransportationType) Scan(value interface{}) error {
-	b, ok := value.(uint8)
-	if !ok {
-		*tt = TransportationType(b)
+	switch value.(type) {
+	case string:
+		v2, err := strconv.ParseInt(fmt.Sprintf("%v", value), 10, 8)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		*tt = TransportationType(v2)
 	}
 
 	return nil
@@ -38,6 +44,6 @@ func (tt TransportationType) IsValid() bool {
 type ProductType struct {
 	gorm.Model
 	Name               string             `binding:"required" gorm:"type:varchar(32);not null;UNIQUE"`
-	TransportationType TransportationType `json:"transportation_type" binding:"required" gorm:"type:transportation_type;default:1;column:transportation_type"`
+	TransportationType TransportationType `json:"transportation_type" binding:"required" gorm:"type:transportation_type;column:transportation_type"`
 	Code               string             `binding:"required" gorm:"not null"`
 }

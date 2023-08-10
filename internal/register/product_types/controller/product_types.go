@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/freddiemo/logistics-api/internal/register/product_types/model"
@@ -10,6 +12,7 @@ import (
 type ProductTypeController interface {
 	Save(ctx *gin.Context) (model.ProductType, error)
 	FindAll(ctx *gin.Context) ([]model.ProductType, error)
+	FindById(ctx *gin.Context) (model.ProductType, error)
 }
 
 type productTypeController struct {
@@ -48,4 +51,20 @@ func (controller *productTypeController) FindAll(ctx *gin.Context) ([]model.Prod
 	}
 
 	return productTypes, nil
+}
+
+func (controller *productTypeController) FindById(ctx *gin.Context) (model.ProductType, error) {
+	var productType model.ProductType
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	productType, err = controller.productTypeService.FindById(id)
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	return productType, nil
 }

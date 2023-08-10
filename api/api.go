@@ -99,3 +99,14 @@ func (api *LogisticsAPI) FindAllProductTypes(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, productTypes)
 	}
 }
+
+func (api *LogisticsAPI) FindProductTypeById(ctx *gin.Context) {
+	productType, err := api.productTypesController.FindById(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, productType)
+	}
+}

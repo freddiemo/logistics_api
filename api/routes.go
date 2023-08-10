@@ -18,6 +18,7 @@ func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 	{
 		productTypes.GET("/", logisticsAPI.FindAllProductTypes)
 		productTypes.POST("/", logisticsAPI.SaveProductType)
+		productTypes.GET(":id", logisticsAPI.FindProductTypeById)
 	}
 }
 

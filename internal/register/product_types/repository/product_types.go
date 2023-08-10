@@ -9,6 +9,7 @@ import (
 type ProductTypeRepository interface {
 	Save(productType model.ProductType) (model.ProductType, error)
 	FindAll() ([]model.ProductType, error)
+	FindById(id int64) (model.ProductType, error)
 }
 
 type productTypeRepo struct {
@@ -39,4 +40,14 @@ func (productTypeRepo *productTypeRepo) FindAll() ([]model.ProductType, error) {
 	}
 
 	return productTypes, nil
+}
+
+func (productTypeRepo *productTypeRepo) FindById(id int64) (model.ProductType, error) {
+	var productType model.ProductType
+	result := productTypeRepo.db.First(&productType, id)
+	if result.Error != nil {
+		return productType, result.Error
+	}
+
+	return productType, nil
 }
