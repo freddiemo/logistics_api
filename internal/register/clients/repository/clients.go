@@ -3,7 +3,7 @@ package repository
 import (
 	"gorm.io/gorm"
 
-	"github.com/freddiemo/logistics-api/internal/clients/model"
+	"github.com/freddiemo/logistics-api/internal/register/clients/model"
 )
 
 type ClientRepository interface {

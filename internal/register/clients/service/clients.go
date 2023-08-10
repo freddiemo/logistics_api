@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/freddiemo/logistics-api/internal/clients/model"
-	"github.com/freddiemo/logistics-api/internal/clients/repository"
+	"github.com/freddiemo/logistics-api/internal/register/clients/model"
+	"github.com/freddiemo/logistics-api/internal/register/clients/repository"
 )
 
 type ClientServiceInterface interface {

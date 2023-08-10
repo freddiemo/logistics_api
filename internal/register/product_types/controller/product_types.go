@@ -1,0 +1,41 @@
+package controller
+
+import (
+	"github.com/gin-gonic/gin"
+
+	"github.com/freddiemo/logistics-api/internal/register/product_types/model"
+	"github.com/freddiemo/logistics-api/internal/register/product_types/service"
+)
+
+type ProductTypeController interface {
+	Save(ctx *gin.Context) (model.ProductType, error)
+}
+
+type productTypeController struct {
+	productTypeService service.ProductTypeServiceInterface
+}
+
+func NewProductTypeController(productTypeService service.ProductTypeServiceInterface) ProductTypeController {
+	return &productTypeController{
+		productTypeService: productTypeService,
+	}
+}
+
+func (controller *productTypeController) Save(ctx *gin.Context) (model.ProductType, error) {
+	var productType model.ProductType
+	err := ctx.ShouldBind(&productType)
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	productType, err = controller.productTypeService.Save(productType)
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	return productType, nil
+}
