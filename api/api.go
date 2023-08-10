@@ -39,3 +39,14 @@ func (api *LogisticsAPI) FindAllClients(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, clients)
 	}
 }
+
+func (api *LogisticsAPI) FindClientById(ctx *gin.Context) {
+	client, err := api.clientsController.FindById(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, client)
+	}
+}

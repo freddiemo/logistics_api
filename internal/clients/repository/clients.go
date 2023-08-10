@@ -9,6 +9,7 @@ import (
 type ClientRepository interface {
 	Save(client model.Client) (model.Client, error)
 	FindAll() ([]model.Client, error)
+	FindById(id int64) (model.Client, error)
 }
 
 type clientRepo struct {
@@ -39,4 +40,14 @@ func (clientRepo *clientRepo) FindAll() ([]model.Client, error) {
 	}
 
 	return clients, nil
+}
+
+func (clientRepo *clientRepo) FindById(id int64) (model.Client, error) {
+	var client model.Client
+	result := clientRepo.db.First(&client, id)
+	if result.Error != nil {
+		return client, result.Error
+	}
+
+	return client, nil
 }

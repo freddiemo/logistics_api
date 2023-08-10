@@ -9,6 +9,7 @@ func addRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 	{
 		clients.GET("/", logisticsAPI.FindAllClients)
 		clients.POST("/", logisticsAPI.SaveClient)
+		clients.GET(":id", logisticsAPI.FindClientById)
 	}
 }
 

@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 
+	"strconv"
+
 	"github.com/freddiemo/logistics-api/internal/clients/model"
 	"github.com/freddiemo/logistics-api/internal/clients/service"
 	"github.com/freddiemo/logistics-api/validators"
@@ -12,6 +14,7 @@ import (
 type ClientController interface {
 	Save(ctx *gin.Context) (model.Client, error)
 	FindAll(ctx *gin.Context) ([]model.Client, error)
+	FindById(ctx *gin.Context) (model.Client, error)
 }
 
 type clientController struct {
@@ -55,4 +58,18 @@ func (controller *clientController) FindAll(ctx *gin.Context) ([]model.Client, e
 	}
 
 	return clients, nil
+}
+
+func (controller *clientController) FindById(ctx *gin.Context) (model.Client, error) {
+	var client model.Client
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.Client{}, err
+	}
+	client, err = controller.clientService.FindById(id)
+	if err != nil {
+		return model.Client{}, err
+	}
+
+	return client, nil
 }

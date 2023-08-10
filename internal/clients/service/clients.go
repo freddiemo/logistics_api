@@ -8,6 +8,7 @@ import (
 type ClientServiceInterface interface {
 	Save(model.Client) (model.Client, error)
 	FindAll() ([]model.Client, error)
+	FindById(id int64) (model.Client, error)
 }
 
 type clientService struct {
@@ -36,4 +37,13 @@ func (service *clientService) FindAll() ([]model.Client, error) {
 	}
 
 	return clients, nil
+}
+
+func (service *clientService) FindById(id int64) (model.Client, error) {
+	client, err := service.clientRepository.FindById(id)
+	if err != nil {
+		return model.Client{}, err
+	}
+
+	return client, nil
 }
