@@ -10,6 +10,7 @@ type ProductTypeRepository interface {
 	Save(productType model.ProductType) (model.ProductType, error)
 	FindAll() ([]model.ProductType, error)
 	FindById(id int64) (model.ProductType, error)
+	Update(model.ProductType) (model.ProductType, error)
 }
 
 type productTypeRepo struct {
@@ -47,6 +48,18 @@ func (productTypeRepo *productTypeRepo) FindById(id int64) (model.ProductType, e
 	result := productTypeRepo.db.First(&productType, id)
 	if result.Error != nil {
 		return productType, result.Error
+	}
+
+	return productType, nil
+}
+
+func (productTypeRepo *productTypeRepo) Update(productType model.ProductType) (model.ProductType, error) {
+	result := productTypeRepo.db.Where("id = ?", productType.ID).Updates(productType)
+	if result.Error != nil {
+		return productType, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return productType, gorm.ErrRecordNotFound
 	}
 
 	return productType, nil

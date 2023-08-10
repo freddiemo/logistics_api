@@ -55,9 +55,12 @@ func (clientRepo *clientRepo) FindById(id int64) (model.Client, error) {
 }
 
 func (clientRepo *clientRepo) Update(client model.Client) (model.Client, error) {
-	result := clientRepo.db.Save(&client)
+	result := clientRepo.db.Where("id = ?", client.ID).Updates(client)
 	if result.Error != nil {
 		return client, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return client, gorm.ErrRecordNotFound
 	}
 
 	return client, nil

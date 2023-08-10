@@ -13,6 +13,7 @@ type ProductTypeController interface {
 	Save(ctx *gin.Context) (model.ProductType, error)
 	FindAll(ctx *gin.Context) ([]model.ProductType, error)
 	FindById(ctx *gin.Context) (model.ProductType, error)
+	Update(ctx *gin.Context) (model.ProductType, error)
 }
 
 type productTypeController struct {
@@ -28,10 +29,6 @@ func NewProductTypeController(productTypeService service.ProductTypeServiceInter
 func (controller *productTypeController) Save(ctx *gin.Context) (model.ProductType, error) {
 	var productType model.ProductType
 	err := ctx.ShouldBind(&productType)
-	if err != nil {
-		return model.ProductType{}, err
-	}
-
 	if err != nil {
 		return model.ProductType{}, err
 	}
@@ -62,6 +59,27 @@ func (controller *productTypeController) FindById(ctx *gin.Context) (model.Produ
 	}
 
 	productType, err = controller.productTypeService.FindById(id)
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	return productType, nil
+}
+
+func (controller *productTypeController) Update(ctx *gin.Context) (model.ProductType, error) {
+	var productType model.ProductType
+	err := ctx.ShouldBind(&productType)
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.ProductType{}, err
+	}
+
+	productType.ID = uint(id)
+	productType, err = controller.productTypeService.Update(productType)
 	if err != nil {
 		return model.ProductType{}, err
 	}

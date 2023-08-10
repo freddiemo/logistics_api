@@ -110,3 +110,14 @@ func (api *LogisticsAPI) FindProductTypeById(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, productType)
 	}
 }
+
+func (api *LogisticsAPI) UpdateProductType(ctx *gin.Context) {
+	productType, err := api.productTypesController.Update(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, productType)
+	}
+}
