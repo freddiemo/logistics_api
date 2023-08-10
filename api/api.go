@@ -50,3 +50,14 @@ func (api *LogisticsAPI) FindClientById(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, client)
 	}
 }
+
+func (api *LogisticsAPI) UpdateClient(ctx *gin.Context) {
+	client, err := api.clientsController.Update(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, client)
+	}
+}

@@ -15,6 +15,7 @@ type ClientController interface {
 	Save(ctx *gin.Context) (model.Client, error)
 	FindAll(ctx *gin.Context) ([]model.Client, error)
 	FindById(ctx *gin.Context) (model.Client, error)
+	Update(ctx *gin.Context) (model.Client, error)
 }
 
 type clientController struct {
@@ -62,11 +63,39 @@ func (controller *clientController) FindAll(ctx *gin.Context) ([]model.Client, e
 
 func (controller *clientController) FindById(ctx *gin.Context) (model.Client, error) {
 	var client model.Client
+
 	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
 	if err != nil {
 		return model.Client{}, err
 	}
+
 	client, err = controller.clientService.FindById(id)
+	if err != nil {
+		return model.Client{}, err
+	}
+
+	return client, nil
+}
+
+func (controller *clientController) Update(ctx *gin.Context) (model.Client, error) {
+	var client model.Client
+	err := ctx.ShouldBind(&client)
+	if err != nil {
+		return model.Client{}, err
+	}
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.Client{}, err
+	}
+
+	err = validate.Struct(client)
+	if err != nil {
+		return model.Client{}, err
+	}
+
+	client.ID = uint(id)
+	client, err = controller.clientService.Update(client)
 	if err != nil {
 		return model.Client{}, err
 	}

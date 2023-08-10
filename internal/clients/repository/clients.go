@@ -10,6 +10,7 @@ type ClientRepository interface {
 	Save(client model.Client) (model.Client, error)
 	FindAll() ([]model.Client, error)
 	FindById(id int64) (model.Client, error)
+	Update(model.Client) (model.Client, error)
 }
 
 type clientRepo struct {
@@ -45,6 +46,15 @@ func (clientRepo *clientRepo) FindAll() ([]model.Client, error) {
 func (clientRepo *clientRepo) FindById(id int64) (model.Client, error) {
 	var client model.Client
 	result := clientRepo.db.First(&client, id)
+	if result.Error != nil {
+		return client, result.Error
+	}
+
+	return client, nil
+}
+
+func (clientRepo *clientRepo) Update(client model.Client) (model.Client, error) {
+	result := clientRepo.db.Save(&client)
 	if result.Error != nil {
 		return client, result.Error
 	}
