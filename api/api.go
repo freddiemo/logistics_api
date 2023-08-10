@@ -61,3 +61,14 @@ func (api *LogisticsAPI) UpdateClient(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, client)
 	}
 }
+
+func (api *LogisticsAPI) DeleteClient(ctx *gin.Context) {
+	err := api.clientsController.Delete(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusNoContent, nil)
+	}
+}

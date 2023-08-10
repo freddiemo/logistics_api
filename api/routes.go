@@ -11,6 +11,7 @@ func addRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 		clients.POST("/", logisticsAPI.SaveClient)
 		clients.GET(":id", logisticsAPI.FindClientById)
 		clients.PUT(":id", logisticsAPI.UpdateClient)
+		clients.DELETE(":id", logisticsAPI.DeleteClient)
 	}
 }
 

@@ -11,6 +11,7 @@ type ClientRepository interface {
 	FindAll() ([]model.Client, error)
 	FindById(id int64) (model.Client, error)
 	Update(model.Client) (model.Client, error)
+	Delete(id int64) error
 }
 
 type clientRepo struct {
@@ -60,4 +61,17 @@ func (clientRepo *clientRepo) Update(client model.Client) (model.Client, error) 
 	}
 
 	return client, nil
+}
+
+func (clientRepo *clientRepo) Delete(id int64) error {
+	var client model.Client
+	result := clientRepo.db.Delete(&client, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
 }

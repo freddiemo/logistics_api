@@ -10,6 +10,7 @@ type ClientServiceInterface interface {
 	FindAll() ([]model.Client, error)
 	FindById(id int64) (model.Client, error)
 	Update(model.Client) (model.Client, error)
+	Delete(id int64) error
 }
 
 type clientService struct {
@@ -56,4 +57,12 @@ func (service *clientService) Update(client model.Client) (model.Client, error) 
 	}
 
 	return client, nil
+}
+
+func (service *clientService) Delete(id int64) error {
+	if err := service.clientRepository.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

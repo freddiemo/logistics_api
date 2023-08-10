@@ -16,6 +16,7 @@ type ClientController interface {
 	FindAll(ctx *gin.Context) ([]model.Client, error)
 	FindById(ctx *gin.Context) (model.Client, error)
 	Update(ctx *gin.Context) (model.Client, error)
+	Delete(ctx *gin.Context) error
 }
 
 type clientController struct {
@@ -101,4 +102,17 @@ func (controller *clientController) Update(ctx *gin.Context) (model.Client, erro
 	}
 
 	return client, nil
+}
+
+func (controller *clientController) Delete(ctx *gin.Context) error {
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return err
+	}
+
+	if err = controller.clientService.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }
