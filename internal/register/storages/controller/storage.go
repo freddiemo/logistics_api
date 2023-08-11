@@ -13,6 +13,7 @@ type StorageController interface {
 	Save(ctx *gin.Context) (model.Storage, error)
 	FindAll(ctx *gin.Context) ([]model.Storage, error)
 	FindById(ctx *gin.Context) (model.Storage, error)
+	Update(ctx *gin.Context) (model.Storage, error)
 }
 
 type storageController struct {
@@ -58,6 +59,27 @@ func (controller *storageController) FindById(ctx *gin.Context) (model.Storage, 
 	}
 
 	storage, err = controller.storageService.FindById(id)
+	if err != nil {
+		return model.Storage{}, err
+	}
+
+	return storage, nil
+}
+
+func (controller *storageController) Update(ctx *gin.Context) (model.Storage, error) {
+	var storage model.Storage
+	err := ctx.ShouldBind(&storage)
+	if err != nil {
+		return model.Storage{}, err
+	}
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.Storage{}, err
+	}
+
+	storage.ID = uint(id)
+	storage, err = controller.storageService.Update(storage)
 	if err != nil {
 		return model.Storage{}, err
 	}

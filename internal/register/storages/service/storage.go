@@ -9,6 +9,7 @@ type StorageServiceInterface interface {
 	Save(model.Storage) (model.Storage, error)
 	FindAll() ([]model.Storage, error)
 	FindById(id int64) (model.Storage, error)
+	Update(model.Storage) (model.Storage, error)
 }
 
 type storageService struct {
@@ -41,6 +42,15 @@ func (service *storageService) FindAll() ([]model.Storage, error) {
 
 func (service *storageService) FindById(id int64) (model.Storage, error) {
 	storage, err := service.storageRepository.FindById(id)
+	if err != nil {
+		return model.Storage{}, err
+	}
+
+	return storage, nil
+}
+
+func (service *storageService) Update(storage model.Storage) (model.Storage, error) {
+	storage, err := service.storageRepository.Update(storage)
 	if err != nil {
 		return model.Storage{}, err
 	}

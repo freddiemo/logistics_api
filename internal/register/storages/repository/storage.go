@@ -10,6 +10,7 @@ type StorageRepository interface {
 	Save(storage model.Storage) (model.Storage, error)
 	FindAll() ([]model.Storage, error)
 	FindById(id int64) (model.Storage, error)
+	Update(model.Storage) (model.Storage, error)
 }
 
 type storageRepo struct {
@@ -47,6 +48,18 @@ func (storageRepo *storageRepo) FindById(id int64) (model.Storage, error) {
 	result := storageRepo.db.First(&storage, id)
 	if result.Error != nil {
 		return storage, result.Error
+	}
+
+	return storage, nil
+}
+
+func (storageRepo *storageRepo) Update(storage model.Storage) (model.Storage, error) {
+	result := storageRepo.db.Where("id = ?", storage.ID).Updates(storage)
+	if result.Error != nil {
+		return storage, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return storage, gorm.ErrRecordNotFound
 	}
 
 	return storage, nil

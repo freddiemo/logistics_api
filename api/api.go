@@ -169,3 +169,14 @@ func (api *LogisticsAPI) FindStorageById(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, storage)
 	}
 }
+
+func (api *LogisticsAPI) UpdateStorage(ctx *gin.Context) {
+	storage, err := api.storagesController.Update(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, storage)
+	}
+}
