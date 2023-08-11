@@ -5,12 +5,16 @@ import (
 
 	"github.com/freddiemo/logistics-api/config"
 	"github.com/freddiemo/logistics-api/db"
+
+	// register
 	clients "github.com/freddiemo/logistics-api/internal/register/clients/model"
 	location "github.com/freddiemo/logistics-api/internal/register/location/model"
 	productTypes "github.com/freddiemo/logistics-api/internal/register/product_types/model"
 	storage "github.com/freddiemo/logistics-api/internal/register/storages/model"
 
+	// logistics
 	landShipment "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/model"
+	maritimeShipment "github.com/freddiemo/logistics-api/internal/logistics/maritime_shipment/model"
 )
 
 func main() {
@@ -37,4 +41,5 @@ func main() {
 
 	// logistic models
 	db.AutoMigrate(&landShipment.LandShipment{})
+	db.AutoMigrate(&maritimeShipment.MaritimeShipment{})
 }

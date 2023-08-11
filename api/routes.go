@@ -42,6 +42,11 @@ func addLogisticsRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 		landShipments.PUT(":id", logisticsAPI.UpdateLandShipment)
 		landShipments.DELETE(":id", logisticsAPI.DeleteLandShipment)
 	}
+
+	maritimeShipments := rg.Group("/maritime_shipments")
+	{
+		maritimeShipments.POST("/", logisticsAPI.SaveMaritimeShipment)
+	}
 }
 
 func getRegisterRoutes(logisticsAPI *LogisticsAPI) {

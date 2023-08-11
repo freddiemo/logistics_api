@@ -1,8 +1,13 @@
 package service
 
 import (
+	"fmt"
+
+	"github.com/freddiemo/logistics-api/internal/logistics/land_shipment/helpers"
 	"github.com/freddiemo/logistics-api/internal/logistics/land_shipment/model"
 	"github.com/freddiemo/logistics-api/internal/logistics/land_shipment/repository"
+
+	storageServ "github.com/freddiemo/logistics-api/internal/register/storages/service"
 )
 
 type LandShipmentServiceInterface interface {
@@ -15,22 +20,40 @@ type LandShipmentServiceInterface interface {
 
 type landShipmentService struct {
 	landShipmentRepository repository.LandShipmentRepository
+	storageService         storageServ.StorageServiceInterface
 }
 
-func NewLandShipmentService(repository repository.LandShipmentRepository) LandShipmentServiceInterface {
+func NewLandShipmentService(
+	repository repository.LandShipmentRepository,
+	storageService storageServ.StorageServiceInterface,
+) LandShipmentServiceInterface {
+
 	return &landShipmentService{
 		landShipmentRepository: repository,
+		storageService:         storageService,
 	}
 }
 
 func (service *landShipmentService) Save(landShipment model.LandShipment) (model.LandShipment, error) {
-	landShipment, err := service.landShipmentRepository.Save(landShipment)
+	// validate only land storage type
+	storage, err := service.storageService.FindById(int64(landShipment.StorageId))
 	if err != nil {
 		return model.LandShipment{}, err
 	}
+	if storage.TransportationType != 1 {
+		return model.LandShipment{}, fmt.Errorf("err: Invalid Transportation Type")
+	}
 
-	if landShipment.ProductQuantity > 10 {
-		landShipment.DeliveryPrice -= landShipment.DeliveryPrice * 0.05
+	// calculate discounts
+	discount := helpers.GetDiscount(landShipment.ProductQuantity, landShipment.DeliveryPrice)
+	if discount > 0 {
+		landShipment.Discount = discount
+	}
+
+	// save
+	landShipment, err = service.landShipmentRepository.Save(landShipment)
+	if err != nil {
+		return model.LandShipment{}, err
 	}
 
 	return landShipment, nil
@@ -55,14 +78,30 @@ func (service *landShipmentService) FindById(id int64) (model.LandShipment, erro
 }
 
 func (service *landShipmentService) Update(landShipment model.LandShipment) (model.LandShipment, error) {
+	// get landShipment from db
 	landShipmentDb, err := service.landShipmentRepository.FindById(int64(landShipment.ID))
 	if err != nil {
 		return model.LandShipment{}, err
 	}
-	if landShipment.DeliveryPrice != landShipmentDb.DeliveryPrice {
-		landShipment.DeliveryPrice -= landShipment.DeliveryPrice * 0.05
+
+	// validate only land storage type
+	storage, err := service.storageService.FindById(int64(landShipment.StorageId))
+	if err != nil {
+		return model.LandShipment{}, err
+	}
+	if storage.TransportationType != 1 {
+		return model.LandShipment{}, fmt.Errorf("err: Invalid Transportation Type")
 	}
 
+	// update discount
+	if landShipment.DeliveryPrice != landShipmentDb.DeliveryPrice {
+		discount := helpers.GetDiscount(landShipment.ProductQuantity, landShipment.DeliveryPrice)
+		if discount > 0 {
+			landShipment.Discount = discount
+		}
+	}
+
+	// update
 	landShipment, err = service.landShipmentRepository.Update(landShipment)
 	if err != nil {
 		return model.LandShipment{}, err

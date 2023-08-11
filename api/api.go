@@ -12,6 +12,7 @@ import (
 
 	// logistics
 	landShipments "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/controller"
+	maritimeShipments "github.com/freddiemo/logistics-api/internal/logistics/maritime_shipment/controller"
 )
 
 type LogisticsAPI struct {
@@ -20,7 +21,8 @@ type LogisticsAPI struct {
 	productTypesController productTypes.ProductTypeController
 	storagesController     storages.StorageController
 	// logistics
-	landShipmentsController landShipments.LandShipmentController
+	landShipmentsController     landShipments.LandShipmentController
+	maritimeShipmentsController maritimeShipments.MaritimeShipmentController
 }
 
 func NewLogisticsAPI(
@@ -30,6 +32,7 @@ func NewLogisticsAPI(
 	storagesController storages.StorageController,
 	// logistics
 	landShipmentsController landShipments.LandShipmentController,
+	maritimeShipmentsController maritimeShipments.MaritimeShipmentController,
 ) *LogisticsAPI {
 	return &LogisticsAPI{
 		// register
@@ -37,7 +40,8 @@ func NewLogisticsAPI(
 		productTypesController: productTypesController,
 		storagesController:     storagesController,
 		// logistcis
-		landShipmentsController: landShipmentsController,
+		landShipmentsController:     landShipmentsController,
+		maritimeShipmentsController: maritimeShipmentsController,
 	}
 }
 
@@ -260,5 +264,16 @@ func (api *LogisticsAPI) DeleteLandShipment(ctx *gin.Context) {
 		})
 	} else {
 		ctx.JSON(http.StatusNoContent, nil)
+	}
+}
+
+func (api *LogisticsAPI) SaveMaritimeShipment(ctx *gin.Context) {
+	maritimeShipment, err := api.maritimeShipmentsController.Save(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, maritimeShipment)
 	}
 }

@@ -24,6 +24,10 @@ import (
 	landShipment "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/controller"
 	landShipmentRepository "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/repository"
 	landShipmentService "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/service"
+
+	maritimeShipment "github.com/freddiemo/logistics-api/internal/logistics/maritime_shipment/controller"
+	maritimeShipmentRepository "github.com/freddiemo/logistics-api/internal/logistics/maritime_shipment/repository"
+	maritimeShipmentService "github.com/freddiemo/logistics-api/internal/logistics/maritime_shipment/service"
 )
 
 var server = gin.Default()
@@ -46,14 +50,20 @@ func Init(envs map[string]string, db *gorm.DB) {
 
 	// logistics
 	var landShipmentRepository landShipmentRepository.LandShipmentRepository = landShipmentRepository.NewLandShipmentRepository(db)
-	var landShipmentService landShipmentService.LandShipmentServiceInterface = landShipmentService.NewLandShipmentService(landShipmentRepository)
+	var landShipmentService landShipmentService.LandShipmentServiceInterface = landShipmentService.NewLandShipmentService(landShipmentRepository, storagesService)
 	var landShipmentController landShipment.LandShipmentController = landShipment.NewLandShipmentController(landShipmentService)
+
+	var maritimeShipmentRepository maritimeShipmentRepository.MaritimeShipmentRepository = maritimeShipmentRepository.NewMaritimeShipmentRepository(db)
+	var maritimeShipmentService maritimeShipmentService.MaritimeShipmentServiceInterface = maritimeShipmentService.NewMaritimeShipmentService(maritimeShipmentRepository, storagesService)
+	var maritimeShipmentController maritimeShipment.MaritimeShipmentController = maritimeShipment.NewMaritimeShipmentController(maritimeShipmentService)
 
 	logisticsAPI := NewLogisticsAPI(
 		// register
 		clientsController, productTypesController, storagesController,
+
 		// logistics
 		landShipmentController,
+		maritimeShipmentController,
 	)
 
 	getRegisterRoutes(logisticsAPI)
