@@ -8,6 +8,7 @@ import (
 
 type LandShipmentRepository interface {
 	Save(storage model.LandShipment) (model.LandShipment, error)
+	FindAll() ([]model.LandShipment, error)
 }
 
 type landShipmentRepo struct {
@@ -28,4 +29,14 @@ func (landShipmentRepo *landShipmentRepo) Save(landShipment model.LandShipment) 
 	}
 
 	return landShipment, nil
+}
+
+func (landShipmentRepo *landShipmentRepo) FindAll() ([]model.LandShipment, error) {
+	var landShipments []model.LandShipment
+	result := landShipmentRepo.db.Find(&landShipments)
+	if result.Error != nil {
+		return landShipments, result.Error
+	}
+
+	return landShipments, nil
 }

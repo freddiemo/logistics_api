@@ -36,6 +36,7 @@ func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 func addLogisticsRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 	landShipments := rg.Group("/land_shipments")
 	{
+		landShipments.GET("/", logisticsAPI.FindAllLandShipments)
 		landShipments.POST("/", logisticsAPI.SaveLandShipment)
 	}
 }

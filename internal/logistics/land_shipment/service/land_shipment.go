@@ -7,6 +7,7 @@ import (
 
 type LandShipmentServiceInterface interface {
 	Save(model.LandShipment) (model.LandShipment, error)
+	FindAll() ([]model.LandShipment, error)
 }
 
 type landShipmentService struct {
@@ -26,4 +27,13 @@ func (service *landShipmentService) Save(landShipment model.LandShipment) (model
 	}
 
 	return landShipment, nil
+}
+
+func (service *landShipmentService) FindAll() ([]model.LandShipment, error) {
+	landShipments, err := service.landShipmentRepository.FindAll()
+	if err != nil {
+		return []model.LandShipment{}, err
+	}
+
+	return landShipments, nil
 }

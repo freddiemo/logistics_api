@@ -11,6 +11,7 @@ import (
 
 type LandShipmentController interface {
 	Save(ctx *gin.Context) (model.LandShipment, error)
+	FindAll(ctx *gin.Context) ([]model.LandShipment, error)
 }
 
 type landShipmentController struct {
@@ -46,4 +47,13 @@ func (controller *landShipmentController) Save(ctx *gin.Context) (model.LandShip
 	}
 
 	return landShipment, nil
+}
+
+func (controller *landShipmentController) FindAll(ctx *gin.Context) ([]model.LandShipment, error) {
+	landShipments, err := controller.landShipmentService.FindAll()
+	if err != nil {
+		return []model.LandShipment{}, err
+	}
+
+	return landShipments, nil
 }

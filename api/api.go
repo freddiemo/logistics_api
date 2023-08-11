@@ -218,3 +218,14 @@ func (api *LogisticsAPI) SaveLandShipment(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, landShipment)
 	}
 }
+
+func (api *LogisticsAPI) FindAllLandShipments(ctx *gin.Context) {
+	landShipments, err := api.landShipmentsController.FindAll(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, landShipments)
+	}
+}
