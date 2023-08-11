@@ -12,6 +12,7 @@ import (
 
 type MaritimeShipmentServiceInterface interface {
 	Save(model.MaritimeShipment) (model.MaritimeShipment, error)
+	FindAll() ([]model.MaritimeShipment, error)
 }
 
 type maritimeShipmentService struct {
@@ -55,4 +56,13 @@ func (service *maritimeShipmentService) Save(maritimeShipment model.MaritimeShip
 	}
 
 	return maritimeShipment, nil
+}
+
+func (service *maritimeShipmentService) FindAll() ([]model.MaritimeShipment, error) {
+	maritimeShipments, err := service.maritimeShipmentRepository.FindAll()
+	if err != nil {
+		return []model.MaritimeShipment{}, err
+	}
+
+	return maritimeShipments, nil
 }

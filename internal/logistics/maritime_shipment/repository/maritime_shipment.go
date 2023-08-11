@@ -8,6 +8,7 @@ import (
 
 type MaritimeShipmentRepository interface {
 	Save(storage model.MaritimeShipment) (model.MaritimeShipment, error)
+	FindAll() ([]model.MaritimeShipment, error)
 }
 
 type maritimeShipmentRepo struct {
@@ -28,4 +29,14 @@ func (maritimeShipmentRepo *maritimeShipmentRepo) Save(maritimeShipment model.Ma
 	}
 
 	return maritimeShipment, nil
+}
+
+func (maritimeShipmentRepo *maritimeShipmentRepo) FindAll() ([]model.MaritimeShipment, error) {
+	var maritimeShipments []model.MaritimeShipment
+	result := maritimeShipmentRepo.db.Find(&maritimeShipments)
+	if result.Error != nil {
+		return maritimeShipments, result.Error
+	}
+
+	return maritimeShipments, nil
 }

@@ -11,6 +11,7 @@ import (
 
 type MaritimeShipmentController interface {
 	Save(ctx *gin.Context) (model.MaritimeShipment, error)
+	FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error)
 }
 
 type maritimeShipmentController struct {
@@ -46,4 +47,13 @@ func (controller *maritimeShipmentController) Save(ctx *gin.Context) (model.Mari
 	}
 
 	return maritimeShipment, nil
+}
+
+func (controller *maritimeShipmentController) FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error) {
+	maritimeShipments, err := controller.maritimeShipmentService.FindAll()
+	if err != nil {
+		return []model.MaritimeShipment{}, err
+	}
+
+	return maritimeShipments, nil
 }
