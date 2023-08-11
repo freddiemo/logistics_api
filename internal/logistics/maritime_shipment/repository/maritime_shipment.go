@@ -10,6 +10,7 @@ type MaritimeShipmentRepository interface {
 	Save(storage model.MaritimeShipment) (model.MaritimeShipment, error)
 	FindAll() ([]model.MaritimeShipment, error)
 	FindById(id int64) (model.MaritimeShipment, error)
+	Update(model.MaritimeShipment) (model.MaritimeShipment, error)
 }
 
 type maritimeShipmentRepo struct {
@@ -47,6 +48,18 @@ func (maritimeShipmentRepo *maritimeShipmentRepo) FindById(id int64) (model.Mari
 	result := maritimeShipmentRepo.db.First(&maritimeShipment, id)
 	if result.Error != nil {
 		return maritimeShipment, result.Error
+	}
+
+	return maritimeShipment, nil
+}
+
+func (maritimeShipmentRepo *maritimeShipmentRepo) Update(maritimeShipment model.MaritimeShipment) (model.MaritimeShipment, error) {
+	result := maritimeShipmentRepo.db.Where("id = ?", maritimeShipment.ID).Updates(maritimeShipment)
+	if result.Error != nil {
+		return maritimeShipment, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return maritimeShipment, gorm.ErrRecordNotFound
 	}
 
 	return maritimeShipment, nil

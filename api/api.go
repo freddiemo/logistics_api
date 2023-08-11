@@ -299,3 +299,14 @@ func (api *LogisticsAPI) FindMaritimeShipmentById(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, maritimeShipment)
 	}
 }
+
+func (api *LogisticsAPI) UpdateMaritimeShipment(ctx *gin.Context) {
+	maritimeShipment, err := api.maritimeShipmentsController.Update(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, maritimeShipment)
+	}
+}

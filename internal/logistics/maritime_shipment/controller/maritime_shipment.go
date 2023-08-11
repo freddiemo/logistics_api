@@ -15,6 +15,7 @@ type MaritimeShipmentController interface {
 	Save(ctx *gin.Context) (model.MaritimeShipment, error)
 	FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error)
 	FindById(ctx *gin.Context) (model.MaritimeShipment, error)
+	Update(ctx *gin.Context) (model.MaritimeShipment, error)
 }
 
 type maritimeShipmentController struct {
@@ -70,6 +71,32 @@ func (controller *maritimeShipmentController) FindById(ctx *gin.Context) (model.
 	}
 
 	maritimeShipment, err = controller.maritimeShipmentService.FindById(id)
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	return maritimeShipment, nil
+}
+
+func (controller *maritimeShipmentController) Update(ctx *gin.Context) (model.MaritimeShipment, error) {
+	var maritimeShipment model.MaritimeShipment
+	err := ctx.ShouldBind(&maritimeShipment)
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	err = validate.Struct(maritimeShipment)
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	maritimeShipment.ID = uint(id)
+	maritimeShipment, err = controller.maritimeShipmentService.Update(maritimeShipment)
 	if err != nil {
 		return model.MaritimeShipment{}, err
 	}

@@ -48,6 +48,7 @@ func addLogisticsRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 		maritimeShipments.GET("/", logisticsAPI.FindAllMaritimeShipments)
 		maritimeShipments.POST("/", logisticsAPI.SaveMaritimeShipment)
 		maritimeShipments.GET(":id", logisticsAPI.FindMaritimeShipmentById)
+		maritimeShipments.PUT(":id", logisticsAPI.UpdateMaritimeShipment)
 	}
 }
 

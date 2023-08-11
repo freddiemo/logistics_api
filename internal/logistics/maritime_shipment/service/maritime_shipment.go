@@ -14,6 +14,7 @@ type MaritimeShipmentServiceInterface interface {
 	Save(model.MaritimeShipment) (model.MaritimeShipment, error)
 	FindAll() ([]model.MaritimeShipment, error)
 	FindById(id int64) (model.MaritimeShipment, error)
+	Update(model.MaritimeShipment) (model.MaritimeShipment, error)
 }
 
 type maritimeShipmentService struct {
@@ -70,6 +71,36 @@ func (service *maritimeShipmentService) FindAll() ([]model.MaritimeShipment, err
 
 func (service *maritimeShipmentService) FindById(id int64) (model.MaritimeShipment, error) {
 	maritimeShipment, err := service.maritimeShipmentRepository.FindById(id)
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	return maritimeShipment, nil
+}
+
+func (service *maritimeShipmentService) Update(maritimeShipment model.MaritimeShipment) (model.MaritimeShipment, error) {
+	// get maritimeShipment from db
+	maritimeShipmentDb, err := service.maritimeShipmentRepository.FindById(int64(maritimeShipment.ID))
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	// validate only maritime storage type
+	storage, err := service.storageService.FindById(int64(maritimeShipment.StorageId))
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+	if storage.TransportationType != 2 {
+		return model.MaritimeShipment{}, fmt.Errorf("err: Invalid Transportation Type")
+	}
+
+	// update discount
+	if maritimeShipment.DeliveryPrice != maritimeShipmentDb.DeliveryPrice {
+		maritimeShipment.Discount = helpers.GetDiscount(maritimeShipment.ProductQuantity, maritimeShipment.DeliveryPrice)
+	}
+
+	// update
+	maritimeShipment, err = service.maritimeShipmentRepository.Update(maritimeShipment)
 	if err != nil {
 		return model.MaritimeShipment{}, err
 	}
