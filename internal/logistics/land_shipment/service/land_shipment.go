@@ -1,6 +1,8 @@
 package service
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"fmt"
 
 	"github.com/freddiemo/logistics-api/internal/logistics/land_shipment/helpers"
@@ -12,7 +14,7 @@ import (
 
 type LandShipmentServiceInterface interface {
 	Save(model.LandShipment) (model.LandShipment, error)
-	FindAll() ([]model.LandShipment, error)
+	FindAll(ctx *gin.Context) ([]model.LandShipment, error)
 	FindById(id int64) (model.LandShipment, error)
 	Update(model.LandShipment) (model.LandShipment, error)
 	Delete(id int64) error
@@ -59,8 +61,8 @@ func (service *landShipmentService) Save(landShipment model.LandShipment) (model
 	return landShipment, nil
 }
 
-func (service *landShipmentService) FindAll() ([]model.LandShipment, error) {
-	landShipments, err := service.landShipmentRepository.FindAll()
+func (service *landShipmentService) FindAll(ctx *gin.Context) ([]model.LandShipment, error) {
+	landShipments, err := service.landShipmentRepository.FindAll(ctx)
 	if err != nil {
 		return []model.LandShipment{}, err
 	}

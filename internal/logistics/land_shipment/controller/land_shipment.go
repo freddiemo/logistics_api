@@ -55,7 +55,7 @@ func (controller *landShipmentController) Save(ctx *gin.Context) (model.LandShip
 }
 
 func (controller *landShipmentController) FindAll(ctx *gin.Context) ([]model.LandShipment, error) {
-	landShipments, err := controller.landShipmentService.FindAll()
+	landShipments, err := controller.landShipmentService.FindAll(ctx)
 	if err != nil {
 		return []model.LandShipment{}, err
 	}

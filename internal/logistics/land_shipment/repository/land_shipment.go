@@ -1,6 +1,8 @@
 package repository
 
 import (
+	filter "github.com/ActiveChooN/gin-gorm-filter"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
 	"github.com/freddiemo/logistics-api/internal/logistics/land_shipment/model"
@@ -8,7 +10,7 @@ import (
 
 type LandShipmentRepository interface {
 	Save(storage model.LandShipment) (model.LandShipment, error)
-	FindAll() ([]model.LandShipment, error)
+	FindAll(ctx *gin.Context) ([]model.LandShipment, error)
 	FindById(id int64) (model.LandShipment, error)
 	Update(model.LandShipment) (model.LandShipment, error)
 	Delete(id int64) error
@@ -34,9 +36,11 @@ func (landShipmentRepo *landShipmentRepo) Save(landShipment model.LandShipment) 
 	return landShipment, nil
 }
 
-func (landShipmentRepo *landShipmentRepo) FindAll() ([]model.LandShipment, error) {
+func (landShipmentRepo *landShipmentRepo) FindAll(ctx *gin.Context) ([]model.LandShipment, error) {
 	var landShipments []model.LandShipment
-	result := landShipmentRepo.db.Find(&landShipments)
+	result := landShipmentRepo.db.Scopes(
+		filter.FilterByQuery(ctx, filter.ALL),
+	).Find(&landShipments)
 	if result.Error != nil {
 		return landShipments, result.Error
 	}

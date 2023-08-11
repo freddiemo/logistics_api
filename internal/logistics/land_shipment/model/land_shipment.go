@@ -14,7 +14,7 @@ type LandShipment struct {
 	Discount        float64   `json:"discount"`
 	ProductQuantity int       `json:"product_quantity" binding:"required" gorm:"not null"`
 	VehiclePlate    string    `json:"vehicle_plate" binding:"required" gorm:"not null" validate:"is-vehicle-plate"`
-	GuideNumber     string    `json:"guide_number" binding:"required" gorm:"not null" validate:"is-guide-number"`
+	GuideNumber     string    `json:"guide_number" binding:"required" gorm:"not null; uniqueIndex" validate:"is-guide-number" filter:"searchable;filterable"`
 	ClientId        int       `json:"client_id" binding:"required" gorm:"not null"`
 	ProductTypeId   int       `json:"product_type_id" binding:"required" gorm:"not null"`
 	StorageId       int       `json:"storage_id" binding:"required" gorm:"not null"`

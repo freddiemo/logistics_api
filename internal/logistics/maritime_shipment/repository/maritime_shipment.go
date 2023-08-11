@@ -1,6 +1,8 @@
 package repository
 
 import (
+	filter "github.com/ActiveChooN/gin-gorm-filter"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
 	"github.com/freddiemo/logistics-api/internal/logistics/maritime_shipment/model"
@@ -8,7 +10,7 @@ import (
 
 type MaritimeShipmentRepository interface {
 	Save(storage model.MaritimeShipment) (model.MaritimeShipment, error)
-	FindAll() ([]model.MaritimeShipment, error)
+	FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error)
 	FindById(id int64) (model.MaritimeShipment, error)
 	Update(model.MaritimeShipment) (model.MaritimeShipment, error)
 	Delete(id int64) error
@@ -34,9 +36,11 @@ func (maritimeShipmentRepo *maritimeShipmentRepo) Save(maritimeShipment model.Ma
 	return maritimeShipment, nil
 }
 
-func (maritimeShipmentRepo *maritimeShipmentRepo) FindAll() ([]model.MaritimeShipment, error) {
+func (maritimeShipmentRepo *maritimeShipmentRepo) FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error) {
 	var maritimeShipments []model.MaritimeShipment
-	result := maritimeShipmentRepo.db.Find(&maritimeShipments)
+	result := maritimeShipmentRepo.db.Scopes(
+		filter.FilterByQuery(ctx, filter.ALL),
+	).Find(&maritimeShipments)
 	if result.Error != nil {
 		return maritimeShipments, result.Error
 	}

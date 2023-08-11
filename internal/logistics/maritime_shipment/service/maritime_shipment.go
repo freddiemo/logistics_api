@@ -1,6 +1,8 @@
 package service
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"fmt"
 
 	"github.com/freddiemo/logistics-api/internal/logistics/maritime_shipment/helpers"
@@ -12,7 +14,7 @@ import (
 
 type MaritimeShipmentServiceInterface interface {
 	Save(model.MaritimeShipment) (model.MaritimeShipment, error)
-	FindAll() ([]model.MaritimeShipment, error)
+	FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error)
 	FindById(id int64) (model.MaritimeShipment, error)
 	Update(model.MaritimeShipment) (model.MaritimeShipment, error)
 	Delete(id int64) error
@@ -61,8 +63,8 @@ func (service *maritimeShipmentService) Save(maritimeShipment model.MaritimeShip
 	return maritimeShipment, nil
 }
 
-func (service *maritimeShipmentService) FindAll() ([]model.MaritimeShipment, error) {
-	maritimeShipments, err := service.maritimeShipmentRepository.FindAll()
+func (service *maritimeShipmentService) FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error) {
+	maritimeShipments, err := service.maritimeShipmentRepository.FindAll(ctx)
 	if err != nil {
 		return []model.MaritimeShipment{}, err
 	}
