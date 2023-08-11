@@ -22,6 +22,11 @@ func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 		productTypes.PUT(":id", logisticsAPI.UpdateProductType)
 		productTypes.DELETE(":id", logisticsAPI.DeleteProductType)
 	}
+
+	storages := rg.Group("/storages")
+	{
+		storages.POST("/", logisticsAPI.SaveStorage)
+	}
 }
 
 func getRegisterRoutes(logisticsAPI *LogisticsAPI) {

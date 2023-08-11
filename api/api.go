@@ -7,19 +7,23 @@ import (
 
 	clients "github.com/freddiemo/logistics-api/internal/register/clients/controller"
 	productTypes "github.com/freddiemo/logistics-api/internal/register/product_types/controller"
+	storages "github.com/freddiemo/logistics-api/internal/register/storages/controller"
 )
 
 type LogisticsAPI struct {
 	clientsController      clients.ClientController
 	productTypesController productTypes.ProductTypeController
+	storagesController     storages.StorageController
 }
 
 func NewLogisticsAPI(
 	clientsController clients.ClientController,
-	productTypesController productTypes.ProductTypeController) *LogisticsAPI {
+	productTypesController productTypes.ProductTypeController,
+	storagesController storages.StorageController) *LogisticsAPI {
 	return &LogisticsAPI{
 		clientsController:      clientsController,
 		productTypesController: productTypesController,
+		storagesController:     storagesController,
 	}
 }
 
@@ -130,5 +134,16 @@ func (api *LogisticsAPI) DeleteProductType(ctx *gin.Context) {
 		})
 	} else {
 		ctx.JSON(http.StatusNoContent, nil)
+	}
+}
+
+func (api *LogisticsAPI) SaveStorage(ctx *gin.Context) {
+	storage, err := api.storagesController.Save(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, storage)
 	}
 }
