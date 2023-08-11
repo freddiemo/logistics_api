@@ -8,6 +8,7 @@ import (
 
 type StorageRepository interface {
 	Save(storage model.Storage) (model.Storage, error)
+	FindAll() ([]model.Storage, error)
 }
 
 type storageRepo struct {
@@ -28,4 +29,14 @@ func (storageRepo *storageRepo) Save(storage model.Storage) (model.Storage, erro
 	}
 
 	return storage, nil
+}
+
+func (storageRepo *storageRepo) FindAll() ([]model.Storage, error) {
+	var storages []model.Storage
+	result := storageRepo.db.Find(&storages)
+	if result.Error != nil {
+		return storages, result.Error
+	}
+
+	return storages, nil
 }

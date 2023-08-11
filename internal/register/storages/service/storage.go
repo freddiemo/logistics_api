@@ -7,6 +7,7 @@ import (
 
 type StorageServiceInterface interface {
 	Save(model.Storage) (model.Storage, error)
+	FindAll() ([]model.Storage, error)
 }
 
 type storageService struct {
@@ -26,4 +27,13 @@ func (service *storageService) Save(storage model.Storage) (model.Storage, error
 	}
 
 	return storage, nil
+}
+
+func (service *storageService) FindAll() ([]model.Storage, error) {
+	storages, err := service.storageRepository.FindAll()
+	if err != nil {
+		return []model.Storage{}, err
+	}
+
+	return storages, nil
 }

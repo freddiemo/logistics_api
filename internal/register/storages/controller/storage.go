@@ -9,6 +9,7 @@ import (
 
 type StorageController interface {
 	Save(ctx *gin.Context) (model.Storage, error)
+	FindAll(ctx *gin.Context) ([]model.Storage, error)
 }
 
 type storageController struct {
@@ -34,4 +35,13 @@ func (controller *storageController) Save(ctx *gin.Context) (model.Storage, erro
 	}
 
 	return storage, nil
+}
+
+func (controller *storageController) FindAll(ctx *gin.Context) ([]model.Storage, error) {
+	storages, err := controller.storageService.FindAll()
+	if err != nil {
+		return []model.Storage{}, err
+	}
+
+	return storages, nil
 }

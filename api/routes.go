@@ -25,6 +25,7 @@ func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 
 	storages := rg.Group("/storages")
 	{
+		storages.GET("/", logisticsAPI.FindAllStorages)
 		storages.POST("/", logisticsAPI.SaveStorage)
 	}
 }

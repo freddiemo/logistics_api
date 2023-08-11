@@ -147,3 +147,14 @@ func (api *LogisticsAPI) SaveStorage(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, storage)
 	}
 }
+
+func (api *LogisticsAPI) FindAllStorages(ctx *gin.Context) {
+	storages, err := api.storagesController.FindAll(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, storages)
+	}
+}
