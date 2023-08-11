@@ -229,3 +229,14 @@ func (api *LogisticsAPI) FindAllLandShipments(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, landShipments)
 	}
 }
+
+func (api *LogisticsAPI) FindLandShipmentById(ctx *gin.Context) {
+	landShipment, err := api.landShipmentsController.FindById(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, landShipment)
+	}
+}
