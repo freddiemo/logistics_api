@@ -10,6 +10,7 @@ type StorageServiceInterface interface {
 	FindAll() ([]model.Storage, error)
 	FindById(id int64) (model.Storage, error)
 	Update(model.Storage) (model.Storage, error)
+	Delete(id int64) error
 }
 
 type storageService struct {
@@ -56,4 +57,12 @@ func (service *storageService) Update(storage model.Storage) (model.Storage, err
 	}
 
 	return storage, nil
+}
+
+func (service *storageService) Delete(id int64) error {
+	if err := service.storageRepository.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

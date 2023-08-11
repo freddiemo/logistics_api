@@ -11,6 +11,7 @@ type StorageRepository interface {
 	FindAll() ([]model.Storage, error)
 	FindById(id int64) (model.Storage, error)
 	Update(model.Storage) (model.Storage, error)
+	Delete(id int64) error
 }
 
 type storageRepo struct {
@@ -63,4 +64,17 @@ func (storageRepo *storageRepo) Update(storage model.Storage) (model.Storage, er
 	}
 
 	return storage, nil
+}
+
+func (storageRepo *storageRepo) Delete(id int64) error {
+	var storage model.Storage
+	result := storageRepo.db.Delete(&storage, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
 }

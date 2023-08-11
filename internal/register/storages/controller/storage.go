@@ -14,6 +14,7 @@ type StorageController interface {
 	FindAll(ctx *gin.Context) ([]model.Storage, error)
 	FindById(ctx *gin.Context) (model.Storage, error)
 	Update(ctx *gin.Context) (model.Storage, error)
+	Delete(ctx *gin.Context) error
 }
 
 type storageController struct {
@@ -85,4 +86,17 @@ func (controller *storageController) Update(ctx *gin.Context) (model.Storage, er
 	}
 
 	return storage, nil
+}
+
+func (controller *storageController) Delete(ctx *gin.Context) error {
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return err
+	}
+
+	if err = controller.storageService.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

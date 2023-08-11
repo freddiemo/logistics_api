@@ -180,3 +180,14 @@ func (api *LogisticsAPI) UpdateStorage(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, storage)
 	}
 }
+
+func (api *LogisticsAPI) DeleteStorage(ctx *gin.Context) {
+	err := api.storagesController.Delete(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusNoContent, nil)
+	}
+}
