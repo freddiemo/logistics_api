@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 
+	// register
 	clients "github.com/freddiemo/logistics-api/internal/register/clients/controller"
 	clientsRepository "github.com/freddiemo/logistics-api/internal/register/clients/repository"
 	clientsService "github.com/freddiemo/logistics-api/internal/register/clients/service"
@@ -18,6 +19,11 @@ import (
 	storages "github.com/freddiemo/logistics-api/internal/register/storages/controller"
 	storagesRepository "github.com/freddiemo/logistics-api/internal/register/storages/repository"
 	storagesService "github.com/freddiemo/logistics-api/internal/register/storages/service"
+
+	// logistics
+	landShipment "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/controller"
+	landShipmentRepository "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/repository"
+	landShipmentService "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/service"
 )
 
 var server = gin.Default()
@@ -25,6 +31,7 @@ var server = gin.Default()
 func Init(envs map[string]string, db *gorm.DB) {
 	setupLogOutput(envs["APP_NAME"])
 
+	// register
 	var clientRepository clientsRepository.ClientRepository = clientsRepository.NewClientRepository(db)
 	var clientService clientsService.ClientServiceInterface = clientsService.NewClientService(clientRepository)
 	var clientsController clients.ClientController = clients.NewClientController(clientService)
@@ -37,7 +44,17 @@ func Init(envs map[string]string, db *gorm.DB) {
 	var storagesService storagesService.StorageServiceInterface = storagesService.NewStorageService(storagesRepository)
 	var storagesController storages.StorageController = storages.NewStorageController(storagesService)
 
-	logisticsAPI := NewLogisticsAPI(clientsController, productTypesController, storagesController)
+	// logistics
+	var landShipmentRepository landShipmentRepository.LandShipmentRepository = landShipmentRepository.NewLandShipmentRepository(db)
+	var landShipmentService landShipmentService.LandShipmentServiceInterface = landShipmentService.NewLandShipmentService(landShipmentRepository)
+	var landShipmentController landShipment.LandShipmentController = landShipment.NewLandShipmentController(landShipmentService)
+
+	logisticsAPI := NewLogisticsAPI(
+		// register
+		clientsController, productTypesController, storagesController,
+		// logistics
+		landShipmentController,
+	)
 
 	getRegisterRoutes(logisticsAPI)
 

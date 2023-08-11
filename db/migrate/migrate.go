@@ -9,6 +9,8 @@ import (
 	location "github.com/freddiemo/logistics-api/internal/register/location/model"
 	productTypes "github.com/freddiemo/logistics-api/internal/register/product_types/model"
 	storage "github.com/freddiemo/logistics-api/internal/register/storages/model"
+
+	landShipment "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/model"
 )
 
 func main() {
@@ -25,10 +27,14 @@ func main() {
 		fmt.Println(result)
 	}
 
+	// register models
 	db.AutoMigrate(&clients.Client{})
 	db.AutoMigrate(&productTypes.ProductType{})
 	db.AutoMigrate(&location.Country{})
 	db.AutoMigrate(&location.State{})
 	db.AutoMigrate(&location.City{})
 	db.AutoMigrate(&storage.Storage{})
+
+	// logistic models
+	db.AutoMigrate(&landShipment.LandShipment{})
 }
