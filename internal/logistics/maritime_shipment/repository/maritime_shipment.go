@@ -9,6 +9,7 @@ import (
 type MaritimeShipmentRepository interface {
 	Save(storage model.MaritimeShipment) (model.MaritimeShipment, error)
 	FindAll() ([]model.MaritimeShipment, error)
+	FindById(id int64) (model.MaritimeShipment, error)
 }
 
 type maritimeShipmentRepo struct {
@@ -39,4 +40,14 @@ func (maritimeShipmentRepo *maritimeShipmentRepo) FindAll() ([]model.MaritimeShi
 	}
 
 	return maritimeShipments, nil
+}
+
+func (maritimeShipmentRepo *maritimeShipmentRepo) FindById(id int64) (model.MaritimeShipment, error) {
+	var maritimeShipment model.MaritimeShipment
+	result := maritimeShipmentRepo.db.First(&maritimeShipment, id)
+	if result.Error != nil {
+		return maritimeShipment, result.Error
+	}
+
+	return maritimeShipment, nil
 }

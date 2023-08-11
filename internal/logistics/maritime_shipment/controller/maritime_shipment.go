@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 
@@ -12,6 +14,7 @@ import (
 type MaritimeShipmentController interface {
 	Save(ctx *gin.Context) (model.MaritimeShipment, error)
 	FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error)
+	FindById(ctx *gin.Context) (model.MaritimeShipment, error)
 }
 
 type maritimeShipmentController struct {
@@ -56,4 +59,20 @@ func (controller *maritimeShipmentController) FindAll(ctx *gin.Context) ([]model
 	}
 
 	return maritimeShipments, nil
+}
+
+func (controller *maritimeShipmentController) FindById(ctx *gin.Context) (model.MaritimeShipment, error) {
+	var maritimeShipment model.MaritimeShipment
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	maritimeShipment, err = controller.maritimeShipmentService.FindById(id)
+	if err != nil {
+		return model.MaritimeShipment{}, err
+	}
+
+	return maritimeShipment, nil
 }
