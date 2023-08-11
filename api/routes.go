@@ -33,8 +33,21 @@ func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 	}
 }
 
+func addLogisticsRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
+	landShipments := rg.Group("/land_shipments")
+	{
+		landShipments.POST("/", logisticsAPI.SaveLandShipment)
+	}
+}
+
 func getRegisterRoutes(logisticsAPI *LogisticsAPI) {
 	v1 := server.Group("/v1")
+
+	// register
 	register := v1.Group("/register")
 	addRegisterRoutes(register, logisticsAPI)
+
+	// logistics
+	logistics := v1.Group("/logistics")
+	addLogisticsRoutes(logistics, logisticsAPI)
 }

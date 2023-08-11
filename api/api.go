@@ -5,28 +5,43 @@ import (
 
 	"net/http"
 
+	// register
 	clients "github.com/freddiemo/logistics-api/internal/register/clients/controller"
 	productTypes "github.com/freddiemo/logistics-api/internal/register/product_types/controller"
 	storages "github.com/freddiemo/logistics-api/internal/register/storages/controller"
+
+	// logistics
+	landShipments "github.com/freddiemo/logistics-api/internal/logistics/land_shipment/controller"
 )
 
 type LogisticsAPI struct {
+	// register
 	clientsController      clients.ClientController
 	productTypesController productTypes.ProductTypeController
 	storagesController     storages.StorageController
+	// logistics
+	landShipmentsController landShipments.LandShipmentController
 }
 
 func NewLogisticsAPI(
+	// register
 	clientsController clients.ClientController,
 	productTypesController productTypes.ProductTypeController,
-	storagesController storages.StorageController) *LogisticsAPI {
+	storagesController storages.StorageController,
+	// logistics
+	landShipmentsController landShipments.LandShipmentController,
+) *LogisticsAPI {
 	return &LogisticsAPI{
+		// register
 		clientsController:      clientsController,
 		productTypesController: productTypesController,
 		storagesController:     storagesController,
+		// logistcis
+		landShipmentsController: landShipmentsController,
 	}
 }
 
+// register
 func (api *LogisticsAPI) SaveClient(ctx *gin.Context) {
 	client, err := api.clientsController.Save(ctx)
 	if err != nil {
@@ -189,5 +204,17 @@ func (api *LogisticsAPI) DeleteStorage(ctx *gin.Context) {
 		})
 	} else {
 		ctx.JSON(http.StatusNoContent, nil)
+	}
+}
+
+// logistics
+func (api *LogisticsAPI) SaveLandShipment(ctx *gin.Context) {
+	landShipment, err := api.landShipmentsController.Save(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, landShipment)
 	}
 }
