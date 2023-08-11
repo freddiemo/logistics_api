@@ -10,6 +10,7 @@ type LandShipmentRepository interface {
 	Save(storage model.LandShipment) (model.LandShipment, error)
 	FindAll() ([]model.LandShipment, error)
 	FindById(id int64) (model.LandShipment, error)
+	Update(model.LandShipment) (model.LandShipment, error)
 }
 
 type landShipmentRepo struct {
@@ -47,6 +48,18 @@ func (landShipmentRepo *landShipmentRepo) FindById(id int64) (model.LandShipment
 	result := landShipmentRepo.db.First(&landShipment, id)
 	if result.Error != nil {
 		return landShipment, result.Error
+	}
+
+	return landShipment, nil
+}
+
+func (landShipmentRepo *landShipmentRepo) Update(landShipment model.LandShipment) (model.LandShipment, error) {
+	result := landShipmentRepo.db.Where("id = ?", landShipment.ID).Updates(landShipment)
+	if result.Error != nil {
+		return landShipment, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return landShipment, gorm.ErrRecordNotFound
 	}
 
 	return landShipment, nil

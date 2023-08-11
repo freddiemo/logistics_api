@@ -240,3 +240,14 @@ func (api *LogisticsAPI) FindLandShipmentById(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, landShipment)
 	}
 }
+
+func (api *LogisticsAPI) UpdateLandShipment(ctx *gin.Context) {
+	landShipment, err := api.landShipmentsController.Update(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusOK, landShipment)
+	}
+}

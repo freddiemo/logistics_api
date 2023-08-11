@@ -15,6 +15,7 @@ type LandShipmentController interface {
 	Save(ctx *gin.Context) (model.LandShipment, error)
 	FindAll(ctx *gin.Context) ([]model.LandShipment, error)
 	FindById(ctx *gin.Context) (model.LandShipment, error)
+	Update(ctx *gin.Context) (model.LandShipment, error)
 }
 
 type landShipmentController struct {
@@ -70,6 +71,32 @@ func (controller *landShipmentController) FindById(ctx *gin.Context) (model.Land
 	}
 
 	landShipment, err = controller.landShipmentService.FindById(id)
+	if err != nil {
+		return model.LandShipment{}, err
+	}
+
+	return landShipment, nil
+}
+
+func (controller *landShipmentController) Update(ctx *gin.Context) (model.LandShipment, error) {
+	var landShipment model.LandShipment
+	err := ctx.ShouldBind(&landShipment)
+	if err != nil {
+		return model.LandShipment{}, err
+	}
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return model.LandShipment{}, err
+	}
+
+	err = validate.Struct(landShipment)
+	if err != nil {
+		return model.LandShipment{}, err
+	}
+
+	landShipment.ID = uint(id)
+	landShipment, err = controller.landShipmentService.Update(landShipment)
 	if err != nil {
 		return model.LandShipment{}, err
 	}

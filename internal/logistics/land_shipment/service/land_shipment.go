@@ -9,6 +9,7 @@ type LandShipmentServiceInterface interface {
 	Save(model.LandShipment) (model.LandShipment, error)
 	FindAll() ([]model.LandShipment, error)
 	FindById(id int64) (model.LandShipment, error)
+	Update(model.LandShipment) (model.LandShipment, error)
 }
 
 type landShipmentService struct {
@@ -41,6 +42,15 @@ func (service *landShipmentService) FindAll() ([]model.LandShipment, error) {
 
 func (service *landShipmentService) FindById(id int64) (model.LandShipment, error) {
 	landShipment, err := service.landShipmentRepository.FindById(id)
+	if err != nil {
+		return model.LandShipment{}, err
+	}
+
+	return landShipment, nil
+}
+
+func (service *landShipmentService) Update(landShipment model.LandShipment) (model.LandShipment, error) {
+	landShipment, err := service.landShipmentRepository.Update(landShipment)
 	if err != nil {
 		return model.LandShipment{}, err
 	}
