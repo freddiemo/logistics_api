@@ -9,6 +9,7 @@ import (
 type StorageRepository interface {
 	Save(storage model.Storage) (model.Storage, error)
 	FindAll() ([]model.Storage, error)
+	FindById(id int64) (model.Storage, error)
 }
 
 type storageRepo struct {
@@ -39,4 +40,14 @@ func (storageRepo *storageRepo) FindAll() ([]model.Storage, error) {
 	}
 
 	return storages, nil
+}
+
+func (storageRepo *storageRepo) FindById(id int64) (model.Storage, error) {
+	var storage model.Storage
+	result := storageRepo.db.First(&storage, id)
+	if result.Error != nil {
+		return storage, result.Error
+	}
+
+	return storage, nil
 }
