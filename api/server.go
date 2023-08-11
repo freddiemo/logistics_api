@@ -14,6 +14,10 @@ import (
 	productTypes "github.com/freddiemo/logistics-api/internal/register/product_types/controller"
 	productTypesRepository "github.com/freddiemo/logistics-api/internal/register/product_types/repository"
 	productTypesService "github.com/freddiemo/logistics-api/internal/register/product_types/service"
+
+	storages "github.com/freddiemo/logistics-api/internal/register/storages/controller"
+	storagesRepository "github.com/freddiemo/logistics-api/internal/register/storages/repository"
+	storagesService "github.com/freddiemo/logistics-api/internal/register/storages/service"
 )
 
 var server = gin.Default()
@@ -29,7 +33,11 @@ func Init(envs map[string]string, db *gorm.DB) {
 	var productTypesService productTypesService.ProductTypeServiceInterface = productTypesService.NewProductTypeService(productTypesRepository)
 	var productTypesController productTypes.ProductTypeController = productTypes.NewProductTypeController(productTypesService)
 
-	logisticsAPI := NewLogisticsAPI(clientsController, productTypesController)
+	var storagesRepository storagesRepository.StorageRepository = storagesRepository.NewStorageRepository(db)
+	var storagesService storagesService.StorageServiceInterface = storagesService.NewStorageService(storagesRepository)
+	var storagesController storages.StorageController = storages.NewStorageController(storagesService)
+
+	logisticsAPI := NewLogisticsAPI(clientsController, productTypesController, storagesController)
 
 	getRegisterRoutes(logisticsAPI)
 

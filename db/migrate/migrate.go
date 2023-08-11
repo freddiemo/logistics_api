@@ -6,7 +6,9 @@ import (
 	"github.com/freddiemo/logistics-api/config"
 	"github.com/freddiemo/logistics-api/db"
 	clients "github.com/freddiemo/logistics-api/internal/register/clients/model"
+	location "github.com/freddiemo/logistics-api/internal/register/location/model"
 	productTypes "github.com/freddiemo/logistics-api/internal/register/product_types/model"
+	storage "github.com/freddiemo/logistics-api/internal/register/storages/model"
 )
 
 func main() {
@@ -25,4 +27,8 @@ func main() {
 
 	db.AutoMigrate(&clients.Client{})
 	db.AutoMigrate(&productTypes.ProductType{})
+	db.AutoMigrate(&location.Country{})
+	db.AutoMigrate(&location.State{})
+	db.AutoMigrate(&location.City{})
+	db.AutoMigrate(&storage.Storage{})
 }
