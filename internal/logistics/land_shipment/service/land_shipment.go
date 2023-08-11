@@ -29,6 +29,10 @@ func (service *landShipmentService) Save(landShipment model.LandShipment) (model
 		return model.LandShipment{}, err
 	}
 
+	if landShipment.ProductQuantity > 10 {
+		landShipment.DeliveryPrice -= landShipment.DeliveryPrice * 0.05
+	}
+
 	return landShipment, nil
 }
 
@@ -51,7 +55,15 @@ func (service *landShipmentService) FindById(id int64) (model.LandShipment, erro
 }
 
 func (service *landShipmentService) Update(landShipment model.LandShipment) (model.LandShipment, error) {
-	landShipment, err := service.landShipmentRepository.Update(landShipment)
+	landShipmentDb, err := service.landShipmentRepository.FindById(int64(landShipment.ID))
+	if err != nil {
+		return model.LandShipment{}, err
+	}
+	if landShipment.DeliveryPrice != landShipmentDb.DeliveryPrice {
+		landShipment.DeliveryPrice -= landShipment.DeliveryPrice * 0.05
+	}
+
+	landShipment, err = service.landShipmentRepository.Update(landShipment)
 	if err != nil {
 		return model.LandShipment{}, err
 	}
