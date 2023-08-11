@@ -11,6 +11,7 @@ type MaritimeShipmentRepository interface {
 	FindAll() ([]model.MaritimeShipment, error)
 	FindById(id int64) (model.MaritimeShipment, error)
 	Update(model.MaritimeShipment) (model.MaritimeShipment, error)
+	Delete(id int64) error
 }
 
 type maritimeShipmentRepo struct {
@@ -63,4 +64,17 @@ func (maritimeShipmentRepo *maritimeShipmentRepo) Update(maritimeShipment model.
 	}
 
 	return maritimeShipment, nil
+}
+
+func (maritimeShipmentRepo *maritimeShipmentRepo) Delete(id int64) error {
+	var maritimeShipment model.MaritimeShipment
+	result := maritimeShipmentRepo.db.Delete(&maritimeShipment, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
 }

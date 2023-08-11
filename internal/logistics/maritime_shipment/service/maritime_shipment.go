@@ -15,6 +15,7 @@ type MaritimeShipmentServiceInterface interface {
 	FindAll() ([]model.MaritimeShipment, error)
 	FindById(id int64) (model.MaritimeShipment, error)
 	Update(model.MaritimeShipment) (model.MaritimeShipment, error)
+	Delete(id int64) error
 }
 
 type maritimeShipmentService struct {
@@ -106,4 +107,12 @@ func (service *maritimeShipmentService) Update(maritimeShipment model.MaritimeSh
 	}
 
 	return maritimeShipment, nil
+}
+
+func (service *maritimeShipmentService) Delete(id int64) error {
+	if err := service.maritimeShipmentRepository.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

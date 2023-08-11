@@ -16,6 +16,7 @@ type MaritimeShipmentController interface {
 	FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error)
 	FindById(ctx *gin.Context) (model.MaritimeShipment, error)
 	Update(ctx *gin.Context) (model.MaritimeShipment, error)
+	Delete(ctx *gin.Context) error
 }
 
 type maritimeShipmentController struct {
@@ -102,4 +103,17 @@ func (controller *maritimeShipmentController) Update(ctx *gin.Context) (model.Ma
 	}
 
 	return maritimeShipment, nil
+}
+
+func (controller *maritimeShipmentController) Delete(ctx *gin.Context) error {
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return err
+	}
+
+	if err = controller.maritimeShipmentService.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

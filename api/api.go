@@ -310,3 +310,14 @@ func (api *LogisticsAPI) UpdateMaritimeShipment(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, maritimeShipment)
 	}
 }
+
+func (api *LogisticsAPI) DeleteMaritimeShipment(ctx *gin.Context) {
+	err := api.maritimeShipmentsController.Delete(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusNoContent, nil)
+	}
+}
