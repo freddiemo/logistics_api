@@ -10,6 +10,7 @@ type LandShipmentServiceInterface interface {
 	FindAll() ([]model.LandShipment, error)
 	FindById(id int64) (model.LandShipment, error)
 	Update(model.LandShipment) (model.LandShipment, error)
+	Delete(id int64) error
 }
 
 type landShipmentService struct {
@@ -56,4 +57,12 @@ func (service *landShipmentService) Update(landShipment model.LandShipment) (mod
 	}
 
 	return landShipment, nil
+}
+
+func (service *landShipmentService) Delete(id int64) error {
+	if err := service.landShipmentRepository.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

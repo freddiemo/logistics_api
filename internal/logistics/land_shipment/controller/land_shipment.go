@@ -16,6 +16,7 @@ type LandShipmentController interface {
 	FindAll(ctx *gin.Context) ([]model.LandShipment, error)
 	FindById(ctx *gin.Context) (model.LandShipment, error)
 	Update(ctx *gin.Context) (model.LandShipment, error)
+	Delete(ctx *gin.Context) error
 }
 
 type landShipmentController struct {
@@ -102,4 +103,17 @@ func (controller *landShipmentController) Update(ctx *gin.Context) (model.LandSh
 	}
 
 	return landShipment, nil
+}
+
+func (controller *landShipmentController) Delete(ctx *gin.Context) error {
+	id, err := strconv.ParseInt(ctx.Param("id"), 0, 0)
+	if err != nil {
+		return err
+	}
+
+	if err = controller.landShipmentService.Delete(id); err != nil {
+		return err
+	}
+
+	return nil
 }

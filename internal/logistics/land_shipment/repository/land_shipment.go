@@ -11,6 +11,7 @@ type LandShipmentRepository interface {
 	FindAll() ([]model.LandShipment, error)
 	FindById(id int64) (model.LandShipment, error)
 	Update(model.LandShipment) (model.LandShipment, error)
+	Delete(id int64) error
 }
 
 type landShipmentRepo struct {
@@ -63,4 +64,17 @@ func (landShipmentRepo *landShipmentRepo) Update(landShipment model.LandShipment
 	}
 
 	return landShipment, nil
+}
+
+func (landShipmentRepo *landShipmentRepo) Delete(id int64) error {
+	var landShipment model.LandShipment
+	result := landShipmentRepo.db.Delete(&landShipment, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
+	return nil
 }

@@ -251,3 +251,14 @@ func (api *LogisticsAPI) UpdateLandShipment(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, landShipment)
 	}
 }
+
+func (api *LogisticsAPI) DeleteLandShipment(ctx *gin.Context) {
+	err := api.landShipmentsController.Delete(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, &Response{
+			Message: err.Error(),
+		})
+	} else {
+		ctx.JSON(http.StatusNoContent, nil)
+	}
+}
