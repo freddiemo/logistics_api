@@ -645,6 +645,7 @@ curl --location --request DELETE 'localhost:8080/v1/register/storages/18'
 
 ### Logistics
 > | submodule           |method | url                                                     | query param  | path param    | description  |
+> |---------------------|-------|---------------------------------------------------------|--------------|---------------|--------------|
 > |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/              |              |               | list         |
 > |land shipments       |POST   |localhost:8080/v1/logistics/land_shipments/              |              |               | create       |
 > |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | find by id   |
