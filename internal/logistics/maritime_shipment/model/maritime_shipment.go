@@ -14,7 +14,7 @@ type MaritimeShipment struct {
 	Discount        float64   `json:"discount"`
 	ProductQuantity int       `json:"product_quantity" binding:"required" gorm:"not null"`
 	FleetNumber     string    `json:"fleet_number" binding:"required" gorm:"not null" validate:"is-fleet-number"`
-	GuideNumber     string    `json:"guide_number" binding:"required" gorm:"not null; uniqueIndex" validate:"is-guide-number" filter:"searchable;filterable"`
+	GuideNumber     string    `json:"guide_number" binding:"required" gorm:"not null;" validate:"is-guide-number" filter:"searchable;filterable"`
 	ClientId        int       `json:"client_id" binding:"required" gorm:"not null"`
 	ProductTypeId   int       `json:"product_type_id" binding:"required" gorm:"not null"`
 	StorageId       int       `json:"storage_id" binding:"required" gorm:"not null"`
