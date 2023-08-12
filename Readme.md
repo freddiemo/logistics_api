@@ -5,6 +5,12 @@ Logistics API RESTfull backend app.
 - [Logistics API](#logistics-api)
   - [Table of Contents](#table-of-contents)
   - [Instructions](#instructions)
+    - [1. Create logistics postgresql database.](#1-create-logistics-postgresql-database)
+    - [2. Clone repository.](#2-clone-repository)
+    - [3. Open repository.](#3-open-repository)
+    - [4. Config environment variables.](#4-config-environment-variables)
+    - [5. Restore database backup from db/logistics.sql](#5-restore-database-backup-from-dblogisticssql)
+    - [6. Run server.](#6-run-server)
   - [Endpoints](#endpoints)
     - [Register](#register)
       - [Clients](#clients)
@@ -73,11 +79,11 @@ Logistics API RESTfull backend app.
           - [Curl](#curl-19)
           - [Response](#response-19)
         - [Search Land Shipments](#search-land-shipments)
-          - [Search Fields](#search-fields)
+          - [Fields](#fields)
           - [Curl](#curl-20)
           - [Response](#response-20)
         - [Filter Land Shipments](#filter-land-shipments)
-          - [Search Fields](#search-fields-1)
+          - [Fields](#fields-1)
           - [Curl](#curl-21)
           - [Response](#response-21)
       - [Maritime Shipments](#maritime-shipments)
@@ -96,23 +102,31 @@ Logistics API RESTfull backend app.
         - [Delete Maritime Shipment](#delete-maritime-shipment)
           - [Curl](#curl-26)
           - [Response](#response-26)
+        - [Search Maritime Shipments](#search-maritime-shipments)
+          - [Fields](#fields-2)
+          - [Curl](#curl-27)
+          - [Response](#response-27)
+        - [Filter Maritime Shipments](#filter-maritime-shipments)
+          - [Fields](#fields-3)
+          - [Curl](#curl-28)
+          - [Response](#response-28)
 
 
 ## Instructions
-1. Create logistics postgresql database.
-    su postgres
-    psql
-    create database logistics;
-2. Clone repository.
-    git clone https://github.com/freddiemo/logistics_api.git
-3. Open repository.
-    cd logistics-api
-4. Config environment variables.
-    cp config/.env_sample config/.env
-    edit environment variables values (database variables values, port server) in config/.env file
-4. Restore database backup from db/logistics.sql
-5. Run server.
-    go run cmd/main.go
+### 1. Create logistics postgresql database.
+* su postgres
+* psql
+* create database logistics;
+### 2. Clone repository.
+* git clone https://github.com/freddiemo/logistics_api.git
+### 3. Open repository.
+* cd logistics-api
+### 4. Config environment variables.
+* cp config/.env_sample config/.env
+* edit environment variables values (database variables values, port server) in config/.env file
+### 5. Restore database backup from db/logistics.sql
+### 6. Run server.
+* go run cmd/main.go
 
 
 ## Endpoints
@@ -831,7 +845,7 @@ curl --location --request DELETE 'localhost:8080/v1/logistics/land_shipments/18'
 > |method | url                                                     | query param  | path param    |
 > |-------|---------------------------------------------------------|--------------|---------------|
 > |GET    |localhost:8080/v1/logistics/land_shipments/?search=value | search=value |               |
-###### Search Fields
+###### Fields
 > | field         | type    | example                   |
 > |---------------|---------|---------------------------|
 > | vehicle_plate | string  | EFG567                    |
@@ -884,7 +898,7 @@ curl --location 'localhost:8080/v1/logistics/land_shipments?search=4dD5678912'
 > |method | url                                                             | query param           | path param    |
 > |-------|-----------------------------------------------------------------|-----------------------|---------------|
 > |GET    |localhost:8080/v1/logistics/land_shipments/?filter="field:value" | filter="field:value"  |               |
-###### Search Fields
+###### Fields
 > | field           | type    | example                   |
 > |-----------------|---------|---------------------------|
 > | delivery_price  | float   | "delivery_price:100"      |
@@ -1121,3 +1135,98 @@ curl --location --request DELETE 'localhost:8080/v1/logistics/maritime_shipments
 > | success | failure       | 
 > |---------|---------------|
 > | 204     |      404      |
+##### Search Maritime Shipments
+> |method | url                                                         | query param  | path param    |
+> |-------|-------------------------------------------------------------|--------------|---------------|
+> |GET    |localhost:8080/v1/logistics/maritime_shipments/?search=value | search=value |               |
+###### Fields
+> | field         | type    | example                   |
+> |---------------|---------|---------------------------|
+> | guide_number  | string  | 5eE6789123                |
+> | fleet_number  | string  | bcd2345b                  |
+###### Curl
+```javascript
+curl --location 'localhost:8080/v1/logistics/maritime_shipments?search=5eE6789123'
+```
+###### Response
+> | success | failure       |
+> |---------|---------------|
+> | 200     |               |
+```javascript
+[
+    {
+        "ID": 2,
+        "CreatedAt": "2023-08-11T15:35:52.896407-05:00",
+        "UpdatedAt": "2023-08-11T15:35:52.896407-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T15:35:52.89636-05:00",
+        "delivery_date": "2023-08-12T10:19:14.559067-05:00",
+        "delivery_price": 200,
+        "discount": 6,
+        "product_quantity": 20,
+        "fleet_number": "bcd2345b",
+        "guide_number": "5eE6789123",
+        "client_id": 2,
+        "product_type_id": 2,
+        "storage_id": 2
+    },
+    {
+        "ID": 1,
+        "CreatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "UpdatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T15:35:25.93101-05:00",
+        "delivery_date": "2023-08-11T10:19:14.559067-05:00",
+        "delivery_price": 100,
+        "discount": 0,
+        "product_quantity": 1,
+        "fleet_number": "Abc1234a",
+        "guide_number": "5eE6789123",
+        "client_id": 1,
+        "product_type_id": 1,
+        "storage_id": 2
+    }
+]
+```
+##### Filter Maritime Shipments
+> |method | url                                                                 | query param               | path param    |
+> |-------|---------------------------------------------------------------------|---------------------------|---------------|
+> |GET    |localhost:8080/v1/logistics/maritime_shipments/?filter="field:value" | filter="field:value"      |               |
+###### Fields
+> | field           | type    | example                   |
+> |-----------------|---------|---------------------------|
+> | delivery_price  | float   | "delivery_price:100"      |
+> | discount        | float   | "discount:6"              |
+> | fleet_number    | string  | "fleet_number:Abc1234a"   |
+> | guide_number    | string  | "guide_number:5eE6789133" |
+> | client_id       | int     | "client_id:1"             |
+> | product_type_id | int     | "product_type_id:2"       |
+> | storage_id      | int     | "storage_id:2"            |
+###### Curl
+```javascript
+curl --location 'localhost:8080/v1/logistics/maritime_shipments?filter=%22delivery_price%3A100%22'
+```
+###### Response
+> | success | failure       |
+> |---------|---------------|
+> | 200     |               |
+```javascript
+[
+    {
+        "ID": 1,
+        "CreatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "UpdatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T15:35:25.93101-05:00",
+        "delivery_date": "2023-08-11T10:19:14.559067-05:00",
+        "delivery_price": 100,
+        "discount": 0,
+        "product_quantity": 1,
+        "fleet_number": "Abc1234a",
+        "guide_number": "5eE6789123",
+        "client_id": 1,
+        "product_type_id": 1,
+        "storage_id": 2
+    }
+]
+```

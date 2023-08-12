@@ -38,7 +38,7 @@ func (maritimeShipmentRepo *maritimeShipmentRepo) Save(maritimeShipment model.Ma
 
 func (maritimeShipmentRepo *maritimeShipmentRepo) FindAll(ctx *gin.Context) ([]model.MaritimeShipment, error) {
 	var maritimeShipments []model.MaritimeShipment
-	result := maritimeShipmentRepo.db.Scopes(
+	result := maritimeShipmentRepo.db.Model(&model.MaritimeShipment{}).Scopes(
 		filter.FilterByQuery(ctx, filter.ALL),
 	).Find(&maritimeShipments)
 	if result.Error != nil {
