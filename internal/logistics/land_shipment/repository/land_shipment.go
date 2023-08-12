@@ -38,7 +38,7 @@ func (landShipmentRepo *landShipmentRepo) Save(landShipment model.LandShipment) 
 
 func (landShipmentRepo *landShipmentRepo) FindAll(ctx *gin.Context) ([]model.LandShipment, error) {
 	var landShipments []model.LandShipment
-	result := landShipmentRepo.db.Scopes(
+	result := landShipmentRepo.db.Model(&model.LandShipment{}).Scopes(
 		filter.FilterByQuery(ctx, filter.ALL),
 	).Find(&landShipments)
 	if result.Error != nil {

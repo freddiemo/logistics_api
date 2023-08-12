@@ -5,6 +5,12 @@ Logistics API RESTfull backend app.
 - [Logistics API](#logistics-api)
   - [Table of Contents](#table-of-contents)
   - [Instructions](#instructions)
+    - [1. Create logistics postgresql database.](#1-create-logistics-postgresql-database)
+    - [2. Clone repository.](#2-clone-repository)
+    - [3. Open repository.](#3-open-repository)
+    - [4. Config environment variables.](#4-config-environment-variables)
+    - [5. Restore database backup from db/logistics.sql](#5-restore-database-backup-from-dblogisticssql)
+    - [6. Run server.](#6-run-server)
   - [Endpoints](#endpoints)
     - [Register](#register)
       - [Clients](#clients)
@@ -72,70 +78,90 @@ Logistics API RESTfull backend app.
         - [Delete Land Shipment](#delete-land-shipment)
           - [Curl](#curl-19)
           - [Response](#response-19)
-      - [Maritime Shipments](#maritime-shipments)
-        - [List Maritime Shipments](#list-maritime-shipments)
+        - [Search Land Shipments](#search-land-shipments)
+          - [Fields](#fields)
           - [Curl](#curl-20)
           - [Response](#response-20)
-        - [Create Maritime Shipments](#create-maritime-shipments)
+        - [Filter Land Shipments](#filter-land-shipments)
+          - [Fields](#fields-1)
           - [Curl](#curl-21)
           - [Response](#response-21)
-        - [Find Maritime Shipment](#find-maritime-shipment)
+      - [Maritime Shipments](#maritime-shipments)
+        - [List Maritime Shipments](#list-maritime-shipments)
           - [Curl](#curl-22)
           - [Response](#response-22)
-        - [Update Maritime Shipment](#update-maritime-shipment)
+        - [Create Maritime Shipments](#create-maritime-shipments)
           - [Curl](#curl-23)
           - [Response](#response-23)
-        - [Delete Maritime Shipment](#delete-maritime-shipment)
+        - [Find Maritime Shipment](#find-maritime-shipment)
           - [Curl](#curl-24)
           - [Response](#response-24)
+        - [Update Maritime Shipment](#update-maritime-shipment)
+          - [Curl](#curl-25)
+          - [Response](#response-25)
+        - [Delete Maritime Shipment](#delete-maritime-shipment)
+          - [Curl](#curl-26)
+          - [Response](#response-26)
+        - [Search Maritime Shipments](#search-maritime-shipments)
+          - [Fields](#fields-2)
+          - [Curl](#curl-27)
+          - [Response](#response-27)
+        - [Filter Maritime Shipments](#filter-maritime-shipments)
+          - [Fields](#fields-3)
+          - [Curl](#curl-28)
+          - [Response](#response-28)
 
 
 ## Instructions
-1. Create logistics postgresql database.
-    su postgres
-    psql
-    create database logistics;
-2. Clone repository.
-    git clone https://github.com/freddiemo/logistics_api.git
-3. Open repository.
-    cd logistics-api
-4. Config environment variables.
-    cp config/.env_sample config/.env
-    edit environment variables values (database variables values, port server) in config/.env file
-4. Restore database backup from db/logistics.sql
-5. Run server.
-    go run cmd/main.go
+### 1. Create logistics postgresql database.
+* su postgres
+* psql
+* create database logistics;
+### 2. Clone repository.
+* git clone https://github.com/freddiemo/logistics_api.git
+### 3. Open repository.
+* cd logistics-api
+### 4. Config environment variables.
+* cp config/.env_sample config/.env
+* edit environment variables values (database variables values, port server) in config/.env file
+### 5. Restore database backup from db/logistics.sql
+### 6. Run server.
+* go run cmd/main.go
 
 
 ## Endpoints
-> |module   | submodule         |method | url                                                   | query param  | path param    | description  |
-> |---------|-------------------|-------|-------------------------------------------------------|--------------|---------------|--------------|
-> | register| clients           |GET    | localhost:8080/v1/register/clients/                   |              |               | list         |
-> | register| clients           |POST   | localhost:8080/v1/register/clients/                   |              |               | create       |
-> | register| clients           |GET    | localhost:8080/v1/register/clients/:id                |              | id(int)       | find by id   |
-> | register| clients           | PUT   | localhost:8080/v1/register/clients/:id                |              | id(int)       | update       |
-> | register| clients           |DELETE | localhost:8080/v1/register/clients/:id                |              | id(int)       | delete       |
-> | register| product types     |GET    | localhost:8080/v1/register/product_types/             |              |               | list         |
-> | register| product types     |POST   | localhost:8080/v1/register/product_types/             |              |               | create       |
-> | register| product types     |GET    | localhost:8080/v1/register/product_types/:id          |              | id(int)       | find by id   |
-> | register| product types     | PUT   | localhost:8080/v1/register/product_types/:id          |              | id(int)       | update       |
-> | register| product types     |DELETE | localhost:8080/v1/register/product_types/:id          |              | id(int)       | delete       |
-> | register| storages          |GET    | localhost:8080/v1/register/storages/                  |              |               | list         |
-> | register| storages          |POST   | localhost:8080/v1/register/storages/                  |              |               | create       |
-> | register| storages          |GET    | localhost:8080/v1/register/storages/:id               |              | id(int)       | find by id   |
-> | register| storages          | PUT   | localhost:8080/v1/register/storages/:id               |              | id(int)       | update       |
-> | register| storages          |DELETE | localhost:8080/v1/register/storages/:id               |              | id(int)       | delete       |
-> |---------|-------------------|-------|-------------------------------------------------------|--------------|---------------|--------------|
-> |logistics|land shipments     |GET    |localhost:8080/v1/logistics/land_shipments/            |              |               | list         |
-> |logistics|land shipments     |POST   |localhost:8080/v1/logistics/land_shipments/            |              |               | create       |
-> |logistics|land shipments     |GET    |localhost:8080/v1/logistics/land_shipments/:id         |              | id(int)       | find by id   |
-> |logistics|land shipments     | PUT   |localhost:8080/v1/logistics/land_shipments/:id         |              | id(int)       | update       |
-> |logistics|land shipments     |DELETE | localhost:8080/v1/logistics/land_shipments/:id        |              | id(int)       | delete       |
-> |logistics|maritime shipments |GET    |localhost:8080/v1/logistics/maritime_shipments/        |              |               | list         |
-> |logistics|maritime shipments |POST   |localhost:8080/v1/logistics/maritime_shipments/        |              |               | create       |
-> |logistics|maritime shipments |GET    |localhost:8080/v1/logistics/maritime_shipments/:id     |              | id(int)       | find by id   |
-> |logistics|maritime shipments | PUT   |localhost:8080/v1/logistics/maritime_shipments/:id     |              | id(int)       | update       |
-> |logistics|maritime shipments |DELETE | localhost:8080/v1/logistics/maritime_shipments/:id    |              | id(int)       | delete       |
+> |module   | submodule         |method | url                                                     | query param  | path param    | description  |
+> |---------|-------------------|-------|---------------------------------------------------------|--------------|---------------|--------------|
+> | register| clients           |GET    | localhost:8080/v1/register/clients/                     |              |               | list         |
+> | register| clients           |POST   | localhost:8080/v1/register/clients/                     |              |               | create       |
+> | register| clients           |GET    | localhost:8080/v1/register/clients/:id                  |              | id(int)       | find by id   |
+> | register| clients           | PUT   | localhost:8080/v1/register/clients/:id                  |              | id(int)       | update       |
+> | register| clients           |DELETE | localhost:8080/v1/register/clients/:id                  |              | id(int)       | delete       |
+> | register| product types     |GET    | localhost:8080/v1/register/product_types/               |              |               | list         |
+> | register| product types     |POST   | localhost:8080/v1/register/product_types/               |              |               | create       |
+> | register| product types     |GET    | localhost:8080/v1/register/product_types/:id            |              | id(int)       | find by id   |
+> | register| product types     | PUT   | localhost:8080/v1/register/product_types/:id            |              | id(int)       | update       |
+> | register| product types     |DELETE | localhost:8080/v1/register/product_types/:id            |              | id(int)       | delete       |
+> | register| storages          |GET    | localhost:8080/v1/register/storages/                    |              |               | list         |
+> | register| storages          |POST   | localhost:8080/v1/register/storages/                    |              |               | create       |
+> | register| storages          |GET    | localhost:8080/v1/register/storages/:id                 |              | id(int)       | find by id   |
+> | register| storages          | PUT   | localhost:8080/v1/register/storages/:id                 |              | id(int)       | update       |
+> | register| storages          |DELETE | localhost:8080/v1/register/storages/:id                 |              | id(int)       | delete       |
+> |---------|-------------------|-------|---------------------------------------------------------|--------------|---------------|--------------|
+> |logistics|land shipments     |GET    |localhost:8080/v1/logistics/land_shipments/              |              |               | list         |
+> |logistics|land shipments     |POST   |localhost:8080/v1/logistics/land_shipments/              |              |               | create       |
+> |logistics|land shipments     |GET    |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | find by id   |
+> |logistics|land shipments     | PUT   |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | update       |
+> |logistics|land shipments     |DELETE |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | delete       |
+> |logistics|land shipments     |GET    |localhost:8080/v1/logistics/land_shipments/?search=value |search=value  |               | search       |
+> |logistics|land shipments     |GET    |localhost:8080/v1/logistics/land_shipments/?filter:"f:v" |filter:fd:val |               | filter       |
+> |logistics|maritime shipments |GET    |localhost:8080/v1/logistics/maritime_shipments/          |              |               | list         |
+> |logistics|maritime shipments |POST   |localhost:8080/v1/logistics/maritime_shipments/          |              |               | create       |
+> |logistics|maritime shipments |GET    |localhost:8080/v1/logistics/maritime_shipments/:id       |              | id(int)       | find by id   |
+> |logistics|maritime shipments | PUT   |localhost:8080/v1/logistics/maritime_shipments/:id       |              | id(int)       | update       |
+> |logistics|maritime shipments |DELETE | localhost:8080/v1/logistics/maritime_shipments/:id      |              | id(int)       | delete       |
+> |logistics|maritime shipments |GET    |localhost:8080/v1/logistics/land_shipments/?search=value |search=value  |               | search       |
+> |logistics|maritime shipments |GET    |localhost:8080/v1/logistics/land_shipments/?filter:"f:v" |filter:fd:val |               | filter       |
 
 ### Register
 > | submodule       |method | url                                           | query param  | path param    | description  |
@@ -618,25 +644,31 @@ curl --location --request DELETE 'localhost:8080/v1/register/storages/18'
 > | 204     |      404      |
 
 ### Logistics
-> | submodule           |method | url                                                   | query param  | path param    | description  |
-> |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/            |              |               | list         |
-> |land shipments       |POST   |localhost:8080/v1/logistics/land_shipments/            |              |               | create       |
-> |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/:id         |              | id(int)       | find by id   |
-> |land shipments       | PUT   |localhost:8080/v1/logistics/land_shipments/:id         |              | id(int)       | update       |
-> |land shipments       |DELETE | localhost:8080/v1/logistics/land_shipments/:id        |              | id(int)       | delete       |
-> |maritime shipments   |GET    |localhost:8080/v1/logistics/maritime_shipments/        |              |               | list         |
-> |maritime shipments   |POST   |localhost:8080/v1/logistics/maritime_shipments/        |              |               | create       |
-> |maritime shipments   |GET    |localhost:8080/v1/logistics/maritime_shipments/:id     |              | id(int)       | find by id   |
-> |maritime shipments   | PUT   |localhost:8080/v1/logistics/maritime_shipments/:id     |              | id(int)       | update       |
-> |maritime shipments   |DELETE | localhost:8080/v1/logistics/maritime_shipments/:id    |              | id(int)       | delete       |
+> | submodule           |method | url                                                     | query param  | path param    | description  |
+> |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/              |              |               | list         |
+> |land shipments       |POST   |localhost:8080/v1/logistics/land_shipments/              |              |               | create       |
+> |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | find by id   |
+> |land shipments       |PUT    |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | update       |
+> |land shipments       |DELETE | localhost:8080/v1/logistics/land_shipments/:id          |              | id(int)       | delete       |
+> |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/?search=value |search=value  |               | search       |
+> |land shipments       |GET    |localhost:8080/v1/logistics/land_shipments/?filter:"f:v" |filter:fd:val |               | filter       |
+> |maritime shipments   |GET    |localhost:8080/v1/logistics/maritime_shipments/          |              |               | list         |
+> |maritime shipments   |POST   |localhost:8080/v1/logistics/maritime_shipments/          |              |               | create       |
+> |maritime shipments   |GET    |localhost:8080/v1/logistics/maritime_shipments/:id       |              | id(int)       | find by id   |
+> |maritime shipments   |PUT    |localhost:8080/v1/logistics/maritime_shipments/:id       |              | id(int)       | update       |
+> |maritime shipments   |DELETE | localhost:8080/v1/logistics/maritime_shipments/:id      |              | id(int)       | delete       |
+> |maritime shipments   |GET    |localhost:8080/v1/logistics/land_shipments/?search=value |search=value  |               | search       |
+> |maritime shipments   |GET    |localhost:8080/v1/logistics/land_shipments/?filter:"f:v" |filter:fd:val |               | filter       |
 #### Land Shipments
 > |method | url                                                     | query param  | path param    | description  |
 > |-------|---------------------------------------------------------|--------------|---------------|--------------|
 > |GET    |localhost:8080/v1/logistics/land_shipments/              |              |               | list         |
 > |POST   |localhost:8080/v1/logistics/land_shipments/              |              |               | create       |
 > |GET    |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | find by id   |
-> | PUT   |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | update       |
-> |DELETE | localhost:8080/v1/logistics/land_shipments/:id          |              | id(int)       | delete       |
+> |PUT    |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | update       |
+> |DELETE |localhost:8080/v1/logistics/land_shipments/:id           |              | id(int)       | delete       |
+> |GET    |localhost:8080/v1/logistics/land_shipments/?search=value |search=value  |               | search       |
+> |GET    |localhost:8080/v1/logistics/land_shipments/?filter:"f:v" |filter:fd:val |               | filter       |
 ##### List Land Shipments
 > |method | url                                                     | query param  | path param    |
 > |-------|---------------------------------------------------------|--------------|---------------|
@@ -646,7 +678,7 @@ curl --location --request DELETE 'localhost:8080/v1/register/storages/18'
 curl --location 'localhost:8080/v1/logistics/land_shipments'
 ```
 ###### Response
-> | success | failure       | 
+> | success | failure       |
 > |---------|---------------|
 > | 200     |               |
 ```javascript
@@ -809,6 +841,117 @@ curl --location --request DELETE 'localhost:8080/v1/logistics/land_shipments/18'
 > | success | failure       | 
 > |---------|---------------|
 > | 204     |      404      |
+##### Search Land Shipments
+> |method | url                                                     | query param  | path param    |
+> |-------|---------------------------------------------------------|--------------|---------------|
+> |GET    |localhost:8080/v1/logistics/land_shipments/?search=value | search=value |               |
+###### Fields
+> | field         | type    | example                   |
+> |---------------|---------|---------------------------|
+> | vehicle_plate | string  | EFG567                    |
+> | guide_number  | string  | 4dD5678912                |
+###### Curl
+```javascript
+curl --location 'localhost:8080/v1/logistics/land_shipments?search=4dD5678912'
+```
+###### Response
+> | success | failure       |
+> |---------|---------------|
+> | 200     |               |
+```javascript
+[
+    {
+        "ID": 6,
+        "CreatedAt": "2023-08-11T13:30:04.351102-05:00",
+        "UpdatedAt": "2023-08-11T15:10:00.882445-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T13:28:18.320034-05:00",
+        "delivery_date": "2023-08-16T10:19:14.559067-05:00",
+        "delivery_price": 600,
+        "discount": 30,
+        "product_quantity": 60,
+        "vehicle_plate": "DEF456",
+        "guide_number": "4dD5678912",
+        "client_id": 3,
+        "product_type_id": 3,
+        "storage_id": 3
+    },
+    {
+        "ID": 5,
+        "CreatedAt": "2023-08-11T13:28:18.320219-05:00",
+        "UpdatedAt": "2023-08-11T15:09:45.925899-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T13:28:18.320034-05:00",
+        "delivery_date": "2023-08-15T10:19:14.559067-05:00",
+        "delivery_price": 500,
+        "discount": 25,
+        "product_quantity": 50,
+        "vehicle_plate": "DEF456",
+        "guide_number": "4dD5678912",
+        "client_id": 3,
+        "product_type_id": 3,
+        "storage_id": 3
+    }
+]
+```
+##### Filter Land Shipments
+> |method | url                                                             | query param           | path param    |
+> |-------|-----------------------------------------------------------------|-----------------------|---------------|
+> |GET    |localhost:8080/v1/logistics/land_shipments/?filter="field:value" | filter="field:value"  |               |
+###### Fields
+> | field           | type    | example                   |
+> |-----------------|---------|---------------------------|
+> | delivery_price  | float   | "delivery_price:100"      |
+> | discount        | float   | "discount:10"             |
+> | vehicle_plate   | string  | "vehicle_plate:EFG567"    |
+> | guide_number    | string  | "guide_number:3cC4567891" |
+> | client_id       | int     | "client_id:1"             |
+> | product_type_id | int     | "product_type_id:2"       |
+> | storage_id      | int     | "storage_id:3"            |
+###### Curl
+```javascript
+curl --location 'localhost:8080/v1/logistics/land_shipments?search=4dD5678912'
+```
+###### Response
+> | success | failure       |
+> |---------|---------------|
+> | 200     |               |
+```javascript
+[
+    {
+        "ID": 6,
+        "CreatedAt": "2023-08-11T13:30:04.351102-05:00",
+        "UpdatedAt": "2023-08-11T15:10:00.882445-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T13:28:18.320034-05:00",
+        "delivery_date": "2023-08-16T10:19:14.559067-05:00",
+        "delivery_price": 600,
+        "discount": 30,
+        "product_quantity": 60,
+        "vehicle_plate": "DEF456",
+        "guide_number": "4dD5678912",
+        "client_id": 3,
+        "product_type_id": 3,
+        "storage_id": 3
+    },
+    {
+        "ID": 5,
+        "CreatedAt": "2023-08-11T13:28:18.320219-05:00",
+        "UpdatedAt": "2023-08-11T15:09:45.925899-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T13:28:18.320034-05:00",
+        "delivery_date": "2023-08-15T10:19:14.559067-05:00",
+        "delivery_price": 500,
+        "discount": 25,
+        "product_quantity": 50,
+        "vehicle_plate": "DEF456",
+        "guide_number": "4dD5678912",
+        "client_id": 3,
+        "product_type_id": 3,
+        "storage_id": 3
+    }
+]
+```
 
 #### Maritime Shipments
 > |method | url                                                     | query param  | path param    | description  |
@@ -818,6 +961,8 @@ curl --location --request DELETE 'localhost:8080/v1/logistics/land_shipments/18'
 > |GET    |localhost:8080/v1/logistics/maritime_shipments/:id       |              | id(int)       | find by id   |
 > | PUT   |localhost:8080/v1/logistics/maritime_shipments/:id       |              | id(int)       | update       |
 > |DELETE | localhost:8080/v1/logistics/maritime_shipments/:id      |              | id(int)       | delete       |
+> |GET    |localhost:8080/v1/logistics/land_shipments/?search=value |search=value  |               | search       |
+> |GET    |localhost:8080/v1/logistics/land_shipments/?filter:"f:v" |filter:fd:val |               | filter       |
 ##### List Maritime Shipments
 > |method | url                                                     | query param  | path param    |
 > |-------|---------------------------------------------------------|--------------|---------------|
@@ -990,3 +1135,98 @@ curl --location --request DELETE 'localhost:8080/v1/logistics/maritime_shipments
 > | success | failure       | 
 > |---------|---------------|
 > | 204     |      404      |
+##### Search Maritime Shipments
+> |method | url                                                         | query param  | path param    |
+> |-------|-------------------------------------------------------------|--------------|---------------|
+> |GET    |localhost:8080/v1/logistics/maritime_shipments/?search=value | search=value |               |
+###### Fields
+> | field         | type    | example                   |
+> |---------------|---------|---------------------------|
+> | guide_number  | string  | 5eE6789123                |
+> | fleet_number  | string  | bcd2345b                  |
+###### Curl
+```javascript
+curl --location 'localhost:8080/v1/logistics/maritime_shipments?search=5eE6789123'
+```
+###### Response
+> | success | failure       |
+> |---------|---------------|
+> | 200     |               |
+```javascript
+[
+    {
+        "ID": 2,
+        "CreatedAt": "2023-08-11T15:35:52.896407-05:00",
+        "UpdatedAt": "2023-08-11T15:35:52.896407-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T15:35:52.89636-05:00",
+        "delivery_date": "2023-08-12T10:19:14.559067-05:00",
+        "delivery_price": 200,
+        "discount": 6,
+        "product_quantity": 20,
+        "fleet_number": "bcd2345b",
+        "guide_number": "5eE6789123",
+        "client_id": 2,
+        "product_type_id": 2,
+        "storage_id": 2
+    },
+    {
+        "ID": 1,
+        "CreatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "UpdatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T15:35:25.93101-05:00",
+        "delivery_date": "2023-08-11T10:19:14.559067-05:00",
+        "delivery_price": 100,
+        "discount": 0,
+        "product_quantity": 1,
+        "fleet_number": "Abc1234a",
+        "guide_number": "5eE6789123",
+        "client_id": 1,
+        "product_type_id": 1,
+        "storage_id": 2
+    }
+]
+```
+##### Filter Maritime Shipments
+> |method | url                                                                 | query param               | path param    |
+> |-------|---------------------------------------------------------------------|---------------------------|---------------|
+> |GET    |localhost:8080/v1/logistics/maritime_shipments/?filter="field:value" | filter="field:value"      |               |
+###### Fields
+> | field           | type    | example                   |
+> |-----------------|---------|---------------------------|
+> | delivery_price  | float   | "delivery_price:100"      |
+> | discount        | float   | "discount:6"              |
+> | fleet_number    | string  | "fleet_number:Abc1234a"   |
+> | guide_number    | string  | "guide_number:5eE6789133" |
+> | client_id       | int     | "client_id:1"             |
+> | product_type_id | int     | "product_type_id:2"       |
+> | storage_id      | int     | "storage_id:2"            |
+###### Curl
+```javascript
+curl --location 'localhost:8080/v1/logistics/maritime_shipments?filter=%22delivery_price%3A100%22'
+```
+###### Response
+> | success | failure       |
+> |---------|---------------|
+> | 200     |               |
+```javascript
+[
+    {
+        "ID": 1,
+        "CreatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "UpdatedAt": "2023-08-11T15:35:25.931055-05:00",
+        "DeletedAt": null,
+        "register_date": "2023-08-11T15:35:25.93101-05:00",
+        "delivery_date": "2023-08-11T10:19:14.559067-05:00",
+        "delivery_price": 100,
+        "discount": 0,
+        "product_quantity": 1,
+        "fleet_number": "Abc1234a",
+        "guide_number": "5eE6789123",
+        "client_id": 1,
+        "product_type_id": 1,
+        "storage_id": 2
+    }
+]
+```
