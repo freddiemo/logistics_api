@@ -2,6 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+
+	"github.com/freddiemo/logistics-api/api/middlewares"
 )
 
 func addRegisterRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
@@ -53,8 +55,8 @@ func addLogisticsRoutes(rg *gin.RouterGroup, logisticsAPI *LogisticsAPI) {
 	}
 }
 
-func getRegisterRoutes(logisticsAPI *LogisticsAPI) {
-	v1 := server.Group("/v1")
+func getRegisterRoutes(logisticsAPI *LogisticsAPI, envs map[string]string) {
+	v1 := server.Group("/v1", middlewares.AuthorizeJWT(envs))
 
 	// register
 	register := v1.Group("/register")

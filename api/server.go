@@ -66,7 +66,7 @@ func Init(envs map[string]string, db *gorm.DB) {
 		maritimeShipmentController,
 	)
 
-	getRegisterRoutes(logisticsAPI)
+	getRegisterRoutes(logisticsAPI, envs)
 
 	server.Run(":" + envs["APP_PORT"])
 }

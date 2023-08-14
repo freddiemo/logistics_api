@@ -130,6 +130,11 @@ Logistics API RESTfull backend app.
 
 
 ## Endpoints
+You need to pass the Bearer token in the headers params in every request. Example
+```javascript
+curl --location 'localhost:8080/v1/logistics/maritime_shipments/?filter=%22storage_id%3A2%22' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNzIjoibG9naXN0aWNzIiwiZXhwIjoxNjkyMjQzNzY3LCJpYXQiOjE2OTE5ODQ1Njd9.53IuERMf9SL9RuI_BGymMnDnbjFMBaKH7F8tfMb-Z28'
+```
 > |module   | submodule         |method | url                                                     | query param  | path param    | description  |
 > |---------|-------------------|-------|---------------------------------------------------------|--------------|---------------|--------------|
 > | register| clients           |GET    | localhost:8080/v1/register/clients/                     |              |               | list         |
